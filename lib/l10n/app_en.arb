@@ -1,0 +1,355 @@
+{
+  "@@locale": "en",
+  "appName": "SurakshaPath",
+  "@appName": {
+    "description": "The title of the application"
+  },
+  "appTagline": "Navigate to Safety.",
+  "@appTagline": {
+    "description": "App tagline displayed under brand title"
+  },
+  "appShortDesc": "Designated safe path during emergencies",
+  "@appShortDesc": {
+    "description": "Short description of the app service"
+  },
+  "navHome": "HOME",
+  "@navHome": {
+    "description": "Bottom navigation label for Home tab"
+  },
+  "navMap": "MAP",
+  "@navMap": {
+    "description": "Bottom navigation label for Map tab"
+  },
+  "navEvacuate": "EVACUATE",
+  "@navEvacuate": {
+    "description": "Bottom navigation label for Evacuate tab"
+  },
+  "navShelters": "SHELTERS",
+  "@navShelters": {
+    "description": "Bottom navigation label for Shelters tab"
+  },
+  "navAlerts": "ALERTS",
+  "@navAlerts": {
+    "description": "Bottom navigation label for Alerts tab"
+  },
+  "navSos": "SOS",
+  "@navSos": {
+    "description": "Bottom navigation label for SOS action"
+  },
+  "demoScenario": "DEMO SCENARIO",
+  "@demoScenario": {
+    "description": "Badge indicating demo simulation scenario"
+  },
+  "demoData": "DEMO DATA",
+  "@demoData": {
+    "description": "Badge indicating unverified demo data"
+  },
+  "languageLabel": "EN",
+  "@languageLabel": {
+    "description": "Current language abbreviation"
+  },
+  "switchLanguage": "Change Language",
+  "@switchLanguage": {
+    "description": "Action to change language"
+  },
+  "chooseLanguageTitle": "Choose Language / భాషను ఎంచుకోండి",
+  "@chooseLanguageTitle": {
+    "description": "Title of the language selection bottom sheet"
+  },
+  "translationInProgress": "Translation in progress",
+  "@translationInProgress": {
+    "description": "Label for languages undergoing translation"
+  },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Label for unreleased features or translations"
+  },
+  "sectionLocation": "Current Location",
+  "@sectionLocation": {
+    "description": "Header for location section"
+  },
+  "sectionDisasterFilter": "Select Disaster Context",
+  "@sectionDisasterFilter": {
+    "description": "Header for disaster selection chips"
+  },
+  "sectionShelterSpotlight": "Closest Safe Shelter",
+  "@sectionShelterSpotlight": {
+    "description": "Header for shelter card"
+  },
+  "sectionActiveAlerts": "Active Hazard Alerts",
+  "@sectionActiveAlerts": {
+    "description": "Header for active alerts"
+  },
+  "sectionQuickActions": "Emergency Quick Access",
+  "@sectionQuickActions": {
+    "description": "Header for quick actions grid"
+  },
+  "locationSubtitle": "Updated 2m ago",
+  "@locationSubtitle": {
+    "description": "Location timestamp subtitle"
+  },
+  "currentCity": "Vijayawada Central",
+  "@currentCity": {
+    "description": "Current city location"
+  },
+  "currentDistrict": "Krishna District, Andhra Pradesh",
+  "@currentDistrict": {
+    "description": "Current district location"
+  },
+  "heroAlertTitle": "[SIMULATION] Flood Warning: Prakasam Barrage",
+  "@heroAlertTitle": {
+    "description": "Hero banner alert headline"
+  },
+  "heroAlertDesc": "[DEMO SCENARIO] Krishna River discharge model exceeding danger mark. Riparian zone evacuation demonstration advisory.",
+  "@heroAlertDesc": {
+    "description": "Hero banner alert advisory text"
+  },
+  "startEvacuationPlan": "Start evacuation plan",
+  "@startEvacuationPlan": {
+    "description": "Action button on hero alert"
+  },
+  "highRisk": "High Risk",
+  "@highRisk": {
+    "description": "High risk severity badge"
+  },
+  "moderateRisk": "Moderate Risk",
+  "@moderateRisk": {
+    "description": "Moderate risk severity badge"
+  },
+  "lowRisk": "Low Risk",
+  "@lowRisk": {
+    "description": "Low risk severity badge"
+  },
+  "criticalRisk": "Critical",
+  "@criticalRisk": {
+    "description": "Critical risk severity badge"
+  },
+  "preparednessTitle": "Preparedness Progress",
+  "@preparednessTitle": {
+    "description": "Preparedness card title"
+  },
+  "preparednessProgress": "3 of 5 steps completed",
+  "@preparednessProgress": {
+    "description": "Preparedness steps count"
+  },
+  "checklistItem1": "Emergency Go-Bag packed",
+  "@checklistItem1": {
+    "description": "Checklist item 1"
+  },
+  "checklistItem2": "Essential documents waterproofed",
+  "@checklistItem2": {
+    "description": "Checklist item 2"
+  },
+  "checklistItem3": "Offline map pack (Download pending)",
+  "@checklistItem3": {
+    "description": "Checklist item 3"
+  },
+  "checklistItem4": "Prescription medicines packed",
+  "@checklistItem4": {
+    "description": "Checklist item 4"
+  },
+  "checklistItem5": "Family meeting point confirmed",
+  "@checklistItem5": {
+    "description": "Checklist item 5"
+  },
+  "disasterFlood": "Flood",
+  "@disasterFlood": {
+    "description": "Disaster type flood"
+  },
+  "disasterCyclone": "Cyclone",
+  "@disasterCyclone": {
+    "description": "Disaster type cyclone"
+  },
+  "disasterEarthquake": "Earthquake",
+  "@disasterEarthquake": {
+    "description": "Disaster type earthquake"
+  },
+  "disasterFire": "Fire",
+  "@disasterFire": {
+    "description": "Disaster type fire"
+  },
+  "disasterHeatwave": "Heatwave",
+  "@disasterHeatwave": {
+    "description": "Disaster type heatwave"
+  },
+  "nearestShelterTitle": "Nearest Shelter",
+  "@nearestShelterTitle": {
+    "description": "Nearest shelter header"
+  },
+  "nearestShelterName": "Bhavani Island Relief Center",
+  "@nearestShelterName": {
+    "description": "Nearest shelter sample name"
+  },
+  "nearestShelterDistance": "1.8 km • 7 mins away",
+  "@nearestShelterDistance": {
+    "description": "Nearest shelter distance and ETA"
+  },
+  "nearestShelterCapacity": "240/400 spots available",
+  "@nearestShelterCapacity": {
+    "description": "Nearest shelter capacity info"
+  },
+  "viewShelter": "View Shelter",
+  "@viewShelter": {
+    "description": "Action to view shelter details"
+  },
+  "searchSheltersHint": "Search shelters by name or area...",
+  "@searchSheltersHint": {
+    "description": "Hint for shelter search field"
+  },
+  "allShelters": "View All Shelters",
+  "@allShelters": {
+    "description": "Button to view all shelters"
+  },
+  "findSafeShelter": "Find Safe Shelter",
+  "@findSafeShelter": {
+    "description": "Find safe shelter title"
+  },
+  "navigateToShelter": "Navigate to Shelter",
+  "@navigateToShelter": {
+    "description": "Navigate to shelter action button"
+  },
+  "shelterCapacity": "Available Capacity",
+  "@shelterCapacity": {
+    "description": "Shelter available capacity header"
+  },
+  "shelterVerifiedBadge": "Community Relief Center (Unverified)",
+  "@shelterVerifiedBadge": {
+    "description": "Designated relief center badge"
+  },
+  "quickMap": "Evac Map",
+  "@quickMap": {
+    "description": "Quick action: Evac map"
+  },
+  "quickRoute": "Evacuate",
+  "@quickRoute": {
+    "description": "Quick action: Evacuate route"
+  },
+  "quickShelters": "Shelters",
+  "@quickShelters": {
+    "description": "Quick action: Shelters list"
+  },
+  "quickOffline": "Offline Pack",
+  "@quickOffline": {
+    "description": "Quick action: Offline pack"
+  },
+  "emergencySosTitle": "EMERGENCY SOS",
+  "@emergencySosTitle": {
+    "description": "SOS section title"
+  },
+  "emergencySosSubtitle": "Local Emergency Guide • Quick Dial 112 • Share Coordinates",
+  "@emergencySosSubtitle": {
+    "description": "SOS subtitle instructions"
+  },
+  "emergencySosAction": "ACTIVATE SOS",
+  "@emergencySosAction": {
+    "description": "SOS button action"
+  },
+  "sosConfirmTitle": "Trigger Emergency SOS?",
+  "@sosConfirmTitle": {
+    "description": "Confirmation title for SOS"
+  },
+  "sosConfirmBody": "Prepare emergency coordinates for sharing and launch direct call to National Emergency Helpline (112). No automated dispatch is active.",
+  "@sosConfirmBody": {
+    "description": "Confirmation body text for SOS"
+  },
+  "sosDialHelpline": "Call National Emergency (112)",
+  "@sosDialHelpline": {
+    "description": "Action to call national emergency 112"
+  },
+  "holdFor3Seconds": "HOLD FOR 3 SECONDS",
+  "@holdFor3Seconds": {
+    "description": "Instruction to hold SOS button"
+  },
+  "releaseToCancel": "RELEASE TO CANCEL",
+  "@releaseToCancel": {
+    "description": "Instruction to cancel SOS hold"
+  },
+  "sosActivated": "SOS ACTIVATED!",
+  "@sosActivated": {
+    "description": "Confirmation when SOS is triggered"
+  },
+  "call112": "Call 112 (National Emergency)",
+  "@call112": {
+    "description": "Call 112 button label"
+  },
+  "call108": "Call 108 (Ambulance)",
+  "@call108": {
+    "description": "Call 108 button label"
+  },
+  "sendLocationSms": "Send Location SMS to Contacts",
+  "@sendLocationSms": {
+    "description": "Action to send SMS with coordinates"
+  },
+  "copyCoordinates": "Copy GPS Coordinates",
+  "@copyCoordinates": {
+    "description": "Action to copy coordinates to clipboard"
+  },
+  "routeTitle": "Evacuation Guidance",
+  "@routeTitle": {
+    "description": "Evacuation route header"
+  },
+  "fromLocation": "Current Location (Bunder Road)",
+  "@fromLocation": {
+    "description": "Route start point"
+  },
+  "toDestination": "Destination: Bhavani Island Center",
+  "@toDestination": {
+    "description": "Route destination point"
+  },
+  "distanceTime": "2.4 km • 11 min",
+  "@distanceTime": {
+    "description": "Route distance and duration"
+  },
+  "startGuidance": "Start Guidance",
+  "@startGuidance": {
+    "description": "Button to begin turn-by-turn guidance"
+  },
+  "hazardAvoidanceNote": "Simulated Hazard Avoidance (Demo): Routing algorithm avoids waterlogged waypoints using sample elevation data.",
+  "@hazardAvoidanceNote": {
+    "description": "Note regarding hazard bypass"
+  },
+  "offlineModeActive": "Offline Demo (Cache Incomplete)",
+  "@offlineModeActive": {
+    "description": "Indicator that offline data is ready"
+  },
+  "gpsActive": "GPS Active (Simulated Fix)",
+  "@gpsActive": {
+    "description": "GPS status note"
+  },
+  "openEvacMap": "Open Evacuation Map",
+  "@openEvacMap": {
+    "description": "Button to open evacuation map"
+  },
+  "activeAlertsTitle": "Active Hazard Alerts",
+  "@activeAlertsTitle": {
+    "description": "Active alerts title"
+  },
+  "earlierAlertsTitle": "Earlier Advisories",
+  "@earlierAlertsTitle": {
+    "description": "Earlier or expired alerts title"
+  },
+  "allClear": "All Clear: No active warnings in your immediate zone",
+  "@allClear": {
+    "description": "Message when no active alerts exist"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Refresh button"
+  },
+  "viewDetails": "View Details",
+  "@viewDetails": {
+    "description": "View details button"
+  },
+  "dismiss": "Dismiss",
+  "@dismiss": {
+    "description": "Dismiss button"
+  },
+  "safePathAdvice": "Follow designated high-ground routes",
+  "@safePathAdvice": {
+    "description": "Advisory text for safe routing"
+  },
+  "unverifiedTranslationNotice": "Unverified Translation: Showing approved English guidance.",
+  "@unverifiedTranslationNotice": {
+    "description": "Disclaimer pill shown when safety instruction is in unverified translation"
+  }
+}
