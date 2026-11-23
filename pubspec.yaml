@@ -11,15 +11,22 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  connectivity_plus: ^6.1.5
   geolocator: ^14.1.2
   intl: ^0.20.3
+  maplibre: ^0.4.0
+  path: ^1.9.0
+  path_provider: ^2.1.5
+  permission_handler: ^11.4.0
   shared_preferences: ^2.5.6
+  sqflite: ^2.4.6
   url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  sqflite_common_ffi: ^2.3.4
 
 flutter:
   uses-material-design: true

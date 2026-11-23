@@ -5,7 +5,6 @@ import 'package:surakshapath/core/constants/app_strings.dart';
 import 'package:surakshapath/core/models/user_location.dart';
 import 'package:surakshapath/core/services/locale_service.dart';
 import 'package:surakshapath/core/services/user_profile_service.dart';
-import 'package:surakshapath/core/widgets/app_header.dart';
 import 'package:surakshapath/features/emergency/screens/emergency_sos_screen.dart';
 import 'package:surakshapath/features/home/screens/home_screen.dart';
 import 'package:surakshapath/features/map/screens/map_screen.dart';
@@ -64,7 +63,7 @@ void main() {
       await tester.pumpAndSettle();
 
       // Recenter FAB taps and reports the saved location
-      final recenterFab = find.byType(FloatingActionButton);
+      final recenterFab = find.byIcon(Icons.my_location);
       expect(recenterFab, findsOneWidget);
       await tester.tap(recenterFab);
       await tester.pump();
