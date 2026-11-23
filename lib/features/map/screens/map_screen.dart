@@ -8,6 +8,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_icons.dart';
 import '../../../core/constants/app_strings.dart';
+import '../../../core/models/disaster_type.dart';
 import '../../../core/models/shelter_model.dart';
 import '../../../core/models/user_location.dart';
 import '../../../core/models/user_profile.dart';
@@ -15,6 +16,7 @@ import '../../../core/services/locale_service.dart';
 import '../../../core/services/user_profile_service.dart';
 import '../../../core/widgets/app_header.dart';
 import '../../../navigation/app_router.dart';
+import '../../disaster/hazard_service.dart';
 import '../location_service.dart';
 import '../offline_map_service.dart';
 
@@ -41,6 +43,7 @@ class _MapScreenState extends State<MapScreen> {
 
   // ── Shelters & Filtering ───────────────────────────────────────────────────
   List<ShelterModel> _shelters = [];
+  List<HazardModel> _hazards = [];
   String _selectedFilter = 'All'; // All, Pets Allowed, Accessible, High Ground
   ShelterModel? _selectedShelter;
 
@@ -108,10 +111,12 @@ class _MapScreenState extends State<MapScreen> {
       accessible: access ? true : null,
     );
     final regions = await _offlineMapService.getDownloadedRegions();
+    final hazards = await HazardService().getHazardsForDisaster(DisasterType.flood);
 
     if (mounted) {
       setState(() {
         _shelters = shelters;
+        _hazards = hazards;
         _downloadedRegions = regions;
         if (_shelters.isNotEmpty && _selectedShelter == null) {
           _selectedShelter = _shelters.first;
@@ -433,6 +438,20 @@ class _MapScreenState extends State<MapScreen> {
                 .toList(),
             color: const Literal(Color(0xFFE53935)),
             radius: const Literal(8.0),
+          ),
+
+          // Active hazard zone circles
+          CircleLayer(
+            points: _hazards
+                .map((h) => Feature(
+                      geometry: Point(
+                        Geographic(lon: h.longitude, lat: h.latitude),
+                      ),
+                      properties: {'id': h.id, 'title': h.title},
+                    ))
+                .toList(),
+            color: const Literal(Color(0x55EF4444)),
+            radius: const Literal(16.0),
           ),
         ],
         onMapCreated: (controller) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
+export '../../features/routing/route_model.dart' hide RouteSafetyStatus;
+
 enum RouteSafetyStatus {
   safe,
   caution,
@@ -32,29 +34,4 @@ enum RouteSafetyStatus {
         return AppColors.primaryBlue;
     }
   }
-}
-
-/// Evacuation route data model for routing team integration.
-class EvacuationRoute {
-  final String id;
-  final String title;
-  final String destinationShelterId;
-  final String destinationShelterName;
-  final double distanceKm;
-  final int estimatedTimeMinutes;
-  final RouteSafetyStatus safetyStatus;
-  final String roadConditionSummary;
-  final List<String> warnings;
-
-  const EvacuationRoute({
-    required this.id,
-    required this.title,
-    required this.destinationShelterId,
-    required this.destinationShelterName,
-    required this.distanceKm,
-    required this.estimatedTimeMinutes,
-    required this.safetyStatus,
-    required this.roadConditionSummary,
-    this.warnings = const [],
-  });
 }

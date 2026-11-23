@@ -74,6 +74,63 @@ enum DisasterType {
     }
   }
 
+  String get alertHeadline {
+    switch (this) {
+      case DisasterType.flood:
+        return 'Krishna & Coastal River Basin Flood Advisory';
+      case DisasterType.cyclone:
+        return 'Severe Cyclonic Storm & Coastal Gale Advisory';
+      case DisasterType.earthquake:
+        return 'Post-Seismic Tremor & Debris Advisory';
+      case DisasterType.tsunami:
+        return 'Coastal Tsunami & Tidal Wave Warning';
+      case DisasterType.fire:
+        return 'Active Urban / Wildfire Hazard Advisory';
+      case DisasterType.landslide:
+        return 'Hill Slope Landslide & Rockfall Advisory';
+      default:
+        return 'Disaster Preparedness & Evacuation Advisory';
+    }
+  }
+
+  String get description {
+    switch (this) {
+      case DisasterType.flood:
+        return 'Waterlogging, canal breaches, and submerged arterial roads.';
+      case DisasterType.cyclone:
+        return 'Gale-force winds, uprooted trees, and falling structural hoardings.';
+      case DisasterType.earthquake:
+        return 'Structural collapses, road surface fissures, and debris obstacles.';
+      case DisasterType.tsunami:
+        return 'Rapid sea level fluctuations, tidal bore, and low-lying coastal flooding.';
+      case DisasterType.fire:
+        return 'Rapid thermal spread, heavy smoke inhalation hazard, and road closures.';
+      case DisasterType.landslide:
+        return 'Slope failure, mudslides, and blocked mountain passes.';
+      default:
+        return 'Active regional disaster condition. Follow verified evacuation guidance.';
+    }
+  }
+
+  String get iconEmoji {
+    switch (this) {
+      case DisasterType.flood:
+        return '🌊';
+      case DisasterType.cyclone:
+        return '🌀';
+      case DisasterType.earthquake:
+        return '🌋';
+      case DisasterType.fire:
+        return '🔥';
+      case DisasterType.landslide:
+        return '⛰️';
+      case DisasterType.tsunami:
+        return '🌊';
+      default:
+        return '⚠️';
+    }
+  }
+
   static DisasterType fromString(String? value) {
     if (value == null) return DisasterType.other;
     return DisasterType.values.firstWhere(

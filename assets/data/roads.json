@@ -1,0 +1,142 @@
+[
+  {
+    "id": "R101",
+    "road_name": "MG Road Expressway",
+    "start": {"latitude": 16.5062, "longitude": 80.6480, "name": "Benz Circle"},
+    "end": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
+    "distance_km": 0.8,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Head West on MG Road towards Center"
+  },
+  {
+    "id": "R102",
+    "road_name": "Canal South Link Road",
+    "start": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
+    "end": {"latitude": 16.5020, "longitude": 80.6350, "name": "Bandar Canal Road"},
+    "distance_km": 1.1,
+    "status": "warning",
+    "is_blocked": false,
+    "turn_instruction": "Turn Left onto Canal South Link Road"
+  },
+  {
+    "id": "R103",
+    "road_name": "Old Canal Road",
+    "start": {"latitude": 16.5020, "longitude": 80.6350, "name": "Bandar Canal Road"},
+    "end": {"latitude": 16.5140, "longitude": 80.6280, "name": "Governorpet Center"},
+    "distance_km": 1.4,
+    "status": "blocked",
+    "is_blocked": true,
+    "turn_instruction": "Proceed along Old Canal Road (SIMULATED FLOOD)"
+  },
+  {
+    "id": "R105",
+    "road_name": "One-Town Access Road",
+    "start": {"latitude": 16.5140, "longitude": 80.6280, "name": "Governorpet Center"},
+    "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
+    "distance_km": 0.7,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Turn Right into ZP High School Shelter"
+  },
+  {
+    "id": "R201",
+    "road_name": "Inner Ring Road Elevated Highway",
+    "start": {"latitude": 16.5062, "longitude": 80.6480, "name": "Benz Circle"},
+    "end": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
+    "distance_km": 1.5,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Take the ramp up onto Inner Ring Road Elevated Highway"
+  },
+  {
+    "id": "R202",
+    "road_name": "Gunadala Bypass",
+    "start": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
+    "end": {"latitude": 16.5280, "longitude": 80.6450, "name": "Gunadala Junction"},
+    "distance_km": 1.4,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Continue straight onto Gunadala Bypass"
+  },
+  {
+    "id": "R203",
+    "road_name": "High-Level Flyover Link",
+    "start": {"latitude": 16.5280, "longitude": 80.6450, "name": "Gunadala Junction"},
+    "end": {"latitude": 16.5250, "longitude": 80.6300, "name": "North Elevated Corridor"},
+    "distance_km": 1.2,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Bear Left onto High-Level Flyover Link"
+  },
+  {
+    "id": "R204",
+    "road_name": "Shelter North Protected Approach",
+    "start": {"latitude": 16.5250, "longitude": 80.6300, "name": "North Elevated Corridor"},
+    "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
+    "distance_km": 1.1,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Descend ramp and arrive at ZP High School Evacuation Shelter"
+  },
+  {
+    "id": "R301",
+    "road_name": "Eastern Ridge Highway",
+    "start": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
+    "end": {"latitude": 16.5300, "longitude": 80.6600, "name": "High Ridge Perimeter"},
+    "distance_km": 2.2,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Take Eastern Ridge Highway towards High Ridge"
+  },
+  {
+    "id": "R302",
+    "road_name": "North Ridge Mountain Pass",
+    "start": {"latitude": 16.5300, "longitude": 80.6600, "name": "High Ridge Perimeter"},
+    "end": {"latitude": 16.5350, "longitude": 80.6380, "name": "North Ridge Flyover"},
+    "distance_km": 1.8,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Follow North Ridge Mountain Pass around flood perimeter"
+  },
+  {
+    "id": "R303",
+    "road_name": "Northern Ridge Descent Road",
+    "start": {"latitude": 16.5350, "longitude": 80.6380, "name": "North Ridge Flyover"},
+    "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
+    "distance_km": 1.3,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Descend into ZP High School Evacuation Shelter entrance"
+  },
+  {
+    "id": "R401",
+    "road_name": "Besant Road Commercial Link",
+    "start": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
+    "end": {"latitude": 16.5110, "longitude": 80.6350, "name": "Besant Commercial Corridor"},
+    "distance_km": 1.2,
+    "status": "warning",
+    "is_blocked": false,
+    "turn_instruction": "Turn Northwest onto Besant Commercial Link"
+  },
+  {
+    "id": "R402",
+    "road_name": "Governorpet Elevated Bridge",
+    "start": {"latitude": 16.5110, "longitude": 80.6350, "name": "Besant Commercial Corridor"},
+    "end": {"latitude": 16.5160, "longitude": 80.6250, "name": "Governorpet High Overpass"},
+    "distance_km": 1.4,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Ascend Governorpet Elevated Bridge"
+  },
+  {
+    "id": "R403",
+    "road_name": "North Avenue Access Link",
+    "start": {"latitude": 16.5160, "longitude": 80.6250, "name": "Governorpet High Overpass"},
+    "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
+    "distance_km": 1.2,
+    "status": "open",
+    "is_blocked": false,
+    "turn_instruction": "Turn Right onto North Avenue towards Shelter Gate"
+  }
+]
