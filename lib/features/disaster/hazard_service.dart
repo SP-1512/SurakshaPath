@@ -245,6 +245,10 @@ class HazardService implements IHazardRepository {
   DateTime? _lastFetchTime;
   static const Duration _cacheTtl = Duration(minutes: 5);
 
+  /// Default advisory proximity buffer around active hazard zones in meters.
+  /// This is an automated heuristic caution margin (~400m), not an official hydrological flood boundary.
+  static const double defaultProximityBufferMeters = 400.0;
+
   @override
   Future<List<HazardModel>> fetchHazards({bool forceRefresh = false}) async {
     if (!forceRefresh &&
@@ -330,6 +334,7 @@ class HazardService implements IHazardRepository {
     double lng,
     DisasterType disasterType, {
     List<HazardModel>? activeHazards,
+    double bufferMeters = defaultProximityBufferMeters,
   }) {
     final hazards = activeHazards ??
         _cachedHazards[disasterType] ??
@@ -345,7 +350,7 @@ class HazardService implements IHazardRepository {
     for (final h in hazards) {
       final dist = h.distanceTo(lat, lng);
       final inDirect = dist <= h.radiusMeters;
-      final inBuffer = dist <= (h.radiusMeters + 400.0);
+      final inBuffer = dist <= (h.radiusMeters + bufferMeters);
 
       if (inDirect || inBuffer) {
         if (inDirect) directHit = true;
@@ -369,7 +374,7 @@ class HazardService implements IHazardRepository {
     final impactNote = worstHazard.specificImpact != null ? ' (${worstHazard.specificImpact})' : '';
     final reason = directHit
         ? '${worstHazard.title}: ${worstHazard.description}$impactNote. Severity: ${worstHazard.severity.label}.'
-        : 'Within proximity buffer of ${worstHazard.title} (~400m perimeter). Proceed with caution.';
+        : 'Within automated advisory caution buffer of ${worstHazard.title} (~${bufferMeters.toInt()}m margin). Note: heuristic advisory margin, not an official flood boundary.';
 
     return HazardRiskAssessment(
       isDirectlyHit: directHit,
@@ -387,6 +392,7 @@ class HazardService implements IHazardRepository {
     GeoPoint end,
     DisasterType disasterType, {
     List<HazardModel>? activeHazards,
+    double bufferMeters = defaultProximityBufferMeters,
   }) {
     const sampleSteps = 5;
     HazardRiskAssessment worstAssessment = HazardRiskAssessment.clear;
@@ -401,6 +407,7 @@ class HazardService implements IHazardRepository {
         lng,
         disasterType,
         activeHazards: activeHazards,
+        bufferMeters: bufferMeters,
       );
 
       if (pointAssessment.isBlocked) {

@@ -12,11 +12,11 @@ enum RouteSafetyStatus {
   String get label {
     switch (this) {
       case RouteSafetyStatus.safe:
-        return 'SAFE PATH';
+        return 'CLEAR OF REPORTED HAZARDS';
       case RouteSafetyStatus.caution:
-        return 'USE CAUTION';
+        return 'KNOWN HAZARD NEARBY (CAUTION)';
       case RouteSafetyStatus.blocked:
-        return 'HAZARD BLOCKED';
+        return 'BLOCKED BY HAZARD';
       case RouteSafetyStatus.simulated:
         return 'SIMULATED CORRIDOR (DEMO)';
     }

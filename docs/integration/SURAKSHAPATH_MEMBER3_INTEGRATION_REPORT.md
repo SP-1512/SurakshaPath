@@ -8,7 +8,8 @@
 **Baseline Git Checkpoints:**
 - Phase 1.1 Core Checkpoint: `3c96fc39ca5a934fa1e665cdbe427e85ae475d19`
 - Member 2 Offline Map & GPS Checkpoint: `e6238e8ebda108ee5557a1663e3f50424743deca`
-- Member 3 Integration Checkpoint: *To be committed locally*
+- Member 3 Integration Checkpoint: `20a993ef344defd757531167e126fd4368157ecd`
+- Member 3 Post-Integration Reliability Audit: `docs/integration/MEMBER3_POST_INTEGRATION_RELIABILITY_AUDIT.md`
 
 ---
 

@@ -245,7 +245,9 @@ class _RoutingScreenState extends State<RoutingScreen> {
                               ],
                             ),
                           ),
-                          const DemoBadge(label: 'SIMULATED CORRIDOR'),
+                          DemoBadge(
+                            label: route.isNavigableRoad ? 'DEMO ROAD GRAPH' : 'SIMULATED CORRIDOR',
+                          ),
                         ],
                       ),
                     ],
@@ -271,6 +273,7 @@ class _RoutingScreenState extends State<RoutingScreen> {
                             painter: _ObstacleBypassPainter(
                               isAlternate: _selectedRouteIndex == 1,
                               hasBlocked: route.hasBlockedRoads,
+                              isNavigableRoad: route.isNavigableRoad,
                             ),
                           ),
                         ),
@@ -354,8 +357,13 @@ class _RoutingScreenState extends State<RoutingScreen> {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              '${route.estimatedTimeMinutes} min',
+                              '~${route.estimatedTimeMinutes} min',
                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: AppColors.primaryBlue),
+                            ),
+                            const SizedBox(height: 2),
+                            const Text(
+                              'Approx @ 25 km/h',
+                              style: TextStyle(fontSize: 10, color: AppColors.slate, fontWeight: FontWeight.w500),
                             ),
                           ],
                         ),
@@ -410,6 +418,22 @@ class _RoutingScreenState extends State<RoutingScreen> {
                               AppStrings.hazardAvoidanceNote,
                               style: const TextStyle(fontSize: 12, color: AppColors.ink, fontWeight: FontWeight.w500),
                             ),
+                            if (route.elevationProfile.isNotEmpty && route.elevationProfile != 'Normal Ground') ...[
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Icon(Icons.terrain_outlined, size: 14, color: AppColors.slate),
+                                  const SizedBox(width: 4),
+                                  Expanded(
+                                    child: Text(
+                                      'Elevation: ${route.elevationProfile}',
+                                      style: const TextStyle(fontSize: 11, color: AppColors.slate, fontWeight: FontWeight.w600),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                             if (route.roadConditionSummary.isNotEmpty &&
                                 route.roadConditionSummary != AppStrings.hazardAvoidanceNote) ...[
                               const SizedBox(height: 4),
@@ -450,7 +474,7 @@ class _RoutingScreenState extends State<RoutingScreen> {
                   _buildStepDirective(
                     '1',
                     'Depart ${userLoc.locationName} Heading West',
-                    '0.0 km • Elevation 18m above sea level',
+                    '0.0 km • Local Corridor Origin',
                     Icons.straight_rounded,
                     false,
                   ),
@@ -622,10 +646,12 @@ class _RoutingScreenState extends State<RoutingScreen> {
 class _ObstacleBypassPainter extends CustomPainter {
   final bool isAlternate;
   final bool hasBlocked;
+  final bool isNavigableRoad;
 
   _ObstacleBypassPainter({
     required this.isAlternate,
     this.hasBlocked = false,
+    this.isNavigableRoad = true,
   });
 
   @override
@@ -640,6 +666,23 @@ class _ObstacleBypassPainter extends CustomPainter {
     for (double y = 0; y < size.height; y += 30) {
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
+
+    // Top network status banner
+    final modePainter = TextPainter(
+      text: TextSpan(
+        text: isNavigableRoad
+            ? 'DEMO ROAD NETWORK (VIJAYAWADA)'
+            : 'GEOMETRIC VECTOR (OFF-GRID)',
+        style: TextStyle(
+          color: isNavigableRoad ? AppColors.emerald.withOpacity(0.9) : const Color(0xFFF59E0B),
+          fontSize: 8.5,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.5,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    modePainter.paint(canvas, Offset((size.width - modePainter.width) / 2, 8));
 
     // 2. Submerged / Hazard Zone (Red circle in middle)
     final hazardCenter = Offset(size.width * 0.48, size.height * 0.52);
@@ -659,7 +702,7 @@ class _ObstacleBypassPainter extends CustomPainter {
     // Hazard text label
     final textPainter = TextPainter(
       text: const TextSpan(
-        text: 'HAZARD: 1.2m FLOODING',
+        text: 'DEMO HAZARD: 1.2m FLOODING',
         style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w800),
       ),
       textDirection: TextDirection.ltr,
@@ -697,8 +740,12 @@ class _ObstacleBypassPainter extends CustomPainter {
       );
     }
 
+    final Color pathColor = !isNavigableRoad
+        ? const Color(0xFFF59E0B)
+        : (hasBlocked ? AppColors.critical : AppColors.emerald);
+
     final routePaint = Paint()
-      ..color = hasBlocked ? AppColors.critical : AppColors.emerald
+      ..color = pathColor
       ..strokeWidth = 4.0
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -716,6 +763,8 @@ class _ObstacleBypassPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _ObstacleBypassPainter oldDelegate) {
-    return oldDelegate.isAlternate != isAlternate || oldDelegate.hasBlocked != hasBlocked;
+    return oldDelegate.isAlternate != isAlternate ||
+        oldDelegate.hasBlocked != hasBlocked ||
+        oldDelegate.isNavigableRoad != isNavigableRoad;
   }
 }

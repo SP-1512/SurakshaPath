@@ -107,8 +107,8 @@ class RouteService {
         disasterType: disasterType,
         hazards: hazards,
         isRecommended: true,
-        elevationProfile: 'High-Ground Elevated Infrastructure',
-        customExplanation: 'Verified corridor avoiding known flooded spillways and storm debris perimeters.',
+        elevationProfile: 'Nominal Corridor (Simulated Elevation)',
+        customExplanation: 'Corridor clear of known active hazard perimeters on local network.',
       );
       calculatedRoutes.add(primarySafeRoute);
     }
@@ -136,7 +136,7 @@ class RouteService {
           disasterType: disasterType,
           hazards: hazards,
           isRecommended: false,
-          elevationProfile: 'Secondary Elevated / Perimeter Bypass',
+          elevationProfile: 'Secondary Bypass (Simulated Elevation)',
           customExplanation: 'Clear secondary alternative path if primary corridor experiences evacuation congestion.',
         );
         calculatedRoutes.add(altRoute);
@@ -164,7 +164,7 @@ class RouteService {
         disasterType: disasterType,
         hazards: hazards,
         isRecommended: false,
-        elevationProfile: 'Low-Lying / Ground Level',
+        elevationProfile: 'Low-Lying Corridor (Simulated Elevation)',
       );
       calculatedRoutes.add(directRoute);
     }
@@ -176,8 +176,10 @@ class RouteService {
         : RouteVerificationState.noVerifiedRoute;
 
     final String status = hasSafe
-        ? '${calculatedRoutes.length} evacuation corridor(s) calculated. Primary safe route clear.'
-        : 'Active hazard alerts block all evaluated road network corridors. Seek elevated shelter immediately.';
+        ? '${calculatedRoutes.length} evacuation corridor(s) calculated. Primary route clear of reported hazards.'
+        : (shortestPathEdges == null
+            ? 'No connected road path found between selected locations on local demo network.'
+            : 'Active hazard alerts block all evaluated road network corridors. Seek elevated shelter immediately.');
 
     return RouteCalculationResult(
       recommendedRoute: primarySafeRoute,
@@ -434,6 +436,44 @@ class RouteService {
     double maxMultiplier = 1.0;
     final hazardReasons = <String>[];
 
+    // 1. Initial Approach Leg (User GPS location to first graph road node)
+    if (pathEdges.isNotEmpty) {
+      final double startLegKm = userLocation.distanceTo(pathEdges.first.startPoint);
+      if (startLegKm > 0.02) {
+        final startAssessment = _hazardService.assessSegmentRisk(
+          userLocation,
+          pathEdges.first.startPoint,
+          disasterType,
+          activeHazards: hazards,
+        );
+        final isStartBlocked = startAssessment.isBlocked;
+        if (isStartBlocked) hasBlocked = true;
+        final startRisk = isStartBlocked
+            ? RouteRiskLevel.blocked
+            : (startAssessment.isDirectlyHit
+                ? RouteRiskLevel.high
+                : (startAssessment.isBufferZone ? RouteRiskLevel.moderate : RouteRiskLevel.low));
+
+        if (startAssessment.riskMultiplier > maxMultiplier) {
+          maxMultiplier = startAssessment.riskMultiplier;
+        }
+
+        segments.add(RoadSegment(
+          id: 'approach_${userLocation.lat}_${pathEdges.first.sourceNodeId}',
+          start: userLocation,
+          end: pathEdges.first.startPoint,
+          roadName: 'Approach to ${pathEdges.first.roadName}',
+          distanceKm: double.parse(startLegKm.toStringAsFixed(2)),
+          isBlocked: isStartBlocked,
+          riskLevel: startRisk,
+          hazardNotes: startAssessment.explanation,
+          turnInstruction: 'Head towards ${pathEdges.first.sourceNodeId} via access road',
+        ));
+        totalKm += startLegKm;
+      }
+    }
+
+    // 2. Traversed Graph Road Segments
     for (final edge in pathEdges) {
       if (!waypoints.contains(edge.startPoint)) waypoints.add(edge.startPoint);
       waypoints.add(edge.endPoint);
@@ -480,6 +520,43 @@ class RouteService {
       totalKm += edge.distanceKm;
     }
 
+    // 3. Final Egress Leg (Last graph road node to destination shelter)
+    if (pathEdges.isNotEmpty) {
+      final double endLegKm = pathEdges.last.endPoint.distanceTo(shelterLocation);
+      if (endLegKm > 0.02) {
+        final endAssessment = _hazardService.assessSegmentRisk(
+          pathEdges.last.endPoint,
+          shelterLocation,
+          disasterType,
+          activeHazards: hazards,
+        );
+        final isEndBlocked = endAssessment.isBlocked;
+        if (isEndBlocked) hasBlocked = true;
+        final endRisk = isEndBlocked
+            ? RouteRiskLevel.blocked
+            : (endAssessment.isDirectlyHit
+                ? RouteRiskLevel.high
+                : (endAssessment.isBufferZone ? RouteRiskLevel.moderate : RouteRiskLevel.low));
+
+        if (endAssessment.riskMultiplier > maxMultiplier) {
+          maxMultiplier = endAssessment.riskMultiplier;
+        }
+
+        segments.add(RoadSegment(
+          id: 'egress_${pathEdges.last.targetNodeId}_${shelterLocation.lat}',
+          start: pathEdges.last.endPoint,
+          end: shelterLocation,
+          roadName: 'Access to ${shelterLocation.name ?? "Shelter"}',
+          distanceKm: double.parse(endLegKm.toStringAsFixed(2)),
+          isBlocked: isEndBlocked,
+          riskLevel: endRisk,
+          hazardNotes: endAssessment.explanation,
+          turnInstruction: 'Turn into entrance of ${shelterLocation.name ?? "Destination Shelter"}',
+        ));
+        totalKm += endLegKm;
+      }
+    }
+
     if (!waypoints.contains(shelterLocation)) waypoints.add(shelterLocation);
 
     final travelMinutes = ((totalKm / 25.0) * 60).round().clamp(2, 600);
@@ -521,7 +598,7 @@ class RouteService {
       isRecommended: isRecommended && !hasBlocked,
       hasBlockedRoads: hasBlocked,
       elevationProfile: elevationProfile,
-      disclaimer: 'Demonstration route calculated from local network. Real-world conditions require on-ground NDRF/SDRF confirmation.',
+      disclaimer: 'Demonstration route calculated from local demo network. Real-world conditions require on-ground NDRF/SDRF confirmation. Absence of reported hazards does not guarantee road safety.',
       isDemo: true,
     );
   }

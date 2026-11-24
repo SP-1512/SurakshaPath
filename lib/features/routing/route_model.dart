@@ -192,13 +192,13 @@ enum RouteVerificationState {
       case RouteVerificationState.calculating:
         return 'CALCULATING ROUTE';
       case RouteVerificationState.routeAvailable:
-        return 'ROUTE AVAILABLE';
+        return 'ROUTE FOUND';
       case RouteVerificationState.routeSafetyUnverified:
         return 'ROUTE SAFETY UNVERIFIED';
       case RouteVerificationState.noVerifiedRoute:
-        return 'NO VERIFIED ROUTE AVAILABLE';
+        return 'NO ROUTE FOUND';
       case RouteVerificationState.demoRoute:
-        return 'DEMO ROUTE';
+        return 'DEMO SCENARIO ROUTE';
     }
   }
 
@@ -331,9 +331,11 @@ class EvacuationRoute {
   String get title => name;
   double get distanceKm => totalDistanceKm;
   int get estimatedTimeMinutes => estimatedMinutes;
+  String get travelTimeLabel => '~$estimatedMinutes min (Approx @ 25 km/h vehicle pace)';
   String get roadConditionSummary => riskExplanation;
   List<GeoPoint> get polylinePoints => waypoints;
   bool get isBlocked => hasBlockedRoads || riskLevel == RouteRiskLevel.blocked;
+  bool get isNavigableRoad => segments.isNotEmpty && !segments.any((s) => s.id.startsWith('geom_'));
 }
 
 /// Container result holding both recommended safe route and alternative routes
