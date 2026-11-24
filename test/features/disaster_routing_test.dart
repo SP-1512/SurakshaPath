@@ -154,8 +154,8 @@ void main() {
       routeService = RouteService();
     });
 
-    test('7. Route calculation outside graph bounds generates honest geometric corridor', () async {
-      // User and shelter in Kakinada (>150 km from Vijayawada road network)
+    test('7. Route calculation in mapped Coastal Sector generates genuine road route; out-of-bounds fails safely', () async {
+      // User and shelter in Kakinada connected coastal network
       const kakinadaUser = GeoPoint(16.9891, 82.2475, name: 'Kakinada Resident');
       const kakinadaShelter = GeoPoint(16.9604, 82.2382, name: 'Kakinada MPCS Shelter');
 
@@ -165,15 +165,22 @@ void main() {
         disasterType: DisasterType.flood,
       );
 
-      // Must NOT falsely snap to Vijayawada Benz Circle
+      // Must calculate a verified road-network route
       expect(result.recommendedRoute, isNotNull);
       final route = result.recommendedRoute!;
-      expect(route.verificationState, equals(RouteVerificationState.routeSafetyUnverified));
-      expect(route.disclaimer, contains('Detailed street network graph is not loaded'));
-      // Distance between user and shelter is ~3.3 km
-      expect(route.totalDistanceKm > 2.5 && route.totalDistanceKm < 4.5, isTrue);
-      expect(route.waypoints.first, equals(kakinadaUser));
-      expect(route.waypoints.last, equals(kakinadaShelter));
+      expect(route.verificationState, equals(RouteVerificationState.routeAvailable));
+      expect(route.isNavigableRoad, isTrue);
+      expect(route.waypoints.length, greaterThanOrEqualTo(8));
+
+      // Out-of-bounds unmapped location must fail safely without drawing straight lines
+      const unmappedLocation = GeoPoint(17.6868, 83.2185, name: 'Visakhapatnam');
+      final failResult = await routeService.calculateEvacuationRoutes(
+        userLocation: unmappedLocation,
+        shelterLocation: kakinadaShelter,
+        disasterType: DisasterType.flood,
+      );
+      expect(failResult.state, equals(RouteVerificationState.noVerifiedRoute));
+      expect(failResult.recommendedRoute, isNull);
     });
 
     test('8. Dijkstra discovers genuine safe path in local graph avoiding blocked canal road', () async {

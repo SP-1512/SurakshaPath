@@ -53,7 +53,7 @@ class FailingShelterService implements IShelterService {
   }
 
   @override
-  Future<ShelterModel?> getClosestSafeShelter() async {
+  Future<ShelterModel?> getClosestSafeShelter([double? userLat, double? userLng]) async {
     throw Exception('Simulated Shelter query error');
   }
 
@@ -118,7 +118,7 @@ class WorkingShelterService implements IShelterService {
   Future<List<ShelterModel>> getAvailableShelters({bool forceRefresh = false}) async => [];
 
   @override
-  Future<ShelterModel?> getClosestSafeShelter() async {
+  Future<ShelterModel?> getClosestSafeShelter([double? userLat, double? userLng]) async {
     return const ShelterModel(
       id: 'shelter-working',
       name: 'Working Safe Shelter Camp',

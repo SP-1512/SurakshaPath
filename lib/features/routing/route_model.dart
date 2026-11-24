@@ -223,6 +223,7 @@ class RoadSegment {
   final String id;
   final GeoPoint start;
   final GeoPoint end;
+  final List<GeoPoint> intermediateCoordinates;
   final String roadName;
   final double distanceKm;
   final bool isBlocked;
@@ -234,6 +235,7 @@ class RoadSegment {
     required this.id,
     required this.start,
     required this.end,
+    this.intermediateCoordinates = const [],
     required this.roadName,
     required this.distanceKm,
     this.isBlocked = false,
@@ -242,10 +244,15 @@ class RoadSegment {
     this.turnInstruction,
   });
 
+  /// Ordered series of all points defining this road segment: start -> intermediates -> end
+  List<GeoPoint> get fullPolyline => [start, ...intermediateCoordinates, end];
+
   Map<String, dynamic> toJson() => {
         'id': id,
         'start': start.toJson(),
         'end': end.toJson(),
+        if (intermediateCoordinates.isNotEmpty)
+          'intermediate_coords': intermediateCoordinates.map((p) => p.toJson()).toList(),
         'roadName': roadName,
         'distanceKm': distanceKm,
         'isBlocked': isBlocked,
@@ -258,6 +265,10 @@ class RoadSegment {
         id: json['id']?.toString() ?? 'road_${DateTime.now().millisecondsSinceEpoch}',
         start: GeoPoint.fromJson(json['start'] as Map<String, dynamic>),
         end: GeoPoint.fromJson(json['end'] as Map<String, dynamic>),
+        intermediateCoordinates: (json['intermediate_coords'] as List<dynamic>?)
+                ?.map((e) => GeoPoint.fromJson(e as Map<String, dynamic>))
+                .toList() ??
+            const [],
         roadName: json['roadName']?.toString() ?? json['road_name']?.toString() ?? 'Connecting Road',
         distanceKm: (json['distanceKm'] ?? json['distance_km'] ?? json['distance'] as num?)?.toDouble() ?? 1.0,
         isBlocked: json['isBlocked'] == true || json['is_blocked'] == true,

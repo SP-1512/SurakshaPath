@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import '../models/data_state.dart';
 import '../models/shelter_model.dart';
 
@@ -5,7 +6,7 @@ import '../models/shelter_model.dart';
 /// Team Member 3 (Shelter management & SOS) will plug in live Firestore / backend sync here.
 abstract class IShelterService {
   Future<List<ShelterModel>> getAvailableShelters({bool forceRefresh = false});
-  Future<ShelterModel?> getClosestSafeShelter();
+  Future<ShelterModel?> getClosestSafeShelter([double? userLat, double? userLng]);
   Future<ShelterModel?> getShelterById(String id);
 }
 
@@ -74,14 +75,14 @@ class MockShelterService implements IShelterService {
       address: 'Krishna River Corridor, Vijayawada, Krishna District, AP',
       latitude: 16.5180,
       longitude: 80.5980,
-      distanceKm: 6.5,
+      distanceKm: 5.8,
       capacityTotal: 600,
       capacityOccupied: 540,
-      status: ShelterStatus.nearFull,
+      status: ShelterStatus.open,
       isVerified: false,
       contactNumber: '+91 866 242 9000',
       facilities: ['High Elevation', 'Emergency Power', 'Ambulance Access', 'Wheelchair Accessible'],
-      notes: 'DEMO DATA: Riverfront high-ground relief camp. Near capacity. Unverified sample record.',
+      notes: 'DEMO DATA: Riverfront high-ground relief camp. Unverified sample record.',
     ),
   ];
 
@@ -113,13 +114,27 @@ class MockShelterService implements IShelterService {
   }
 
   @override
-  Future<ShelterModel?> getClosestSafeShelter() async {
+  Future<ShelterModel?> getClosestSafeShelter([double? userLat, double? userLng]) async {
     final list = await getAvailableShelters();
     if (list.isEmpty) return null;
     final openShelters = list.where((s) => s.status == ShelterStatus.open).toList();
-    if (openShelters.isEmpty) return list.first;
-    openShelters.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
-    return openShelters.first;
+    final candidates = openShelters.isNotEmpty ? openShelters : List<ShelterModel>.from(list);
+    if (userLat != null && userLng != null) {
+      double haversineKm(double lat1, double lon1, double lat2, double lon2) {
+        const r = 6371.0;
+        final dLat = (lat2 - lat1) * (math.pi / 180.0);
+        final dLon = (lon2 - lon1) * (math.pi / 180.0);
+        final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
+            math.cos(lat1 * (math.pi / 180.0)) * math.cos(lat2 * (math.pi / 180.0)) *
+            math.sin(dLon / 2) * math.sin(dLon / 2);
+        return 2 * r * math.atan2(math.sqrt(a), math.sqrt(1 - a));
+      }
+      candidates.sort((a, b) => haversineKm(userLat, userLng, a.latitude, a.longitude)
+          .compareTo(haversineKm(userLat, userLng, b.latitude, b.longitude)));
+    } else {
+      candidates.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
+    }
+    return candidates.first;
   }
 
   @override

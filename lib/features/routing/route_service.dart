@@ -17,6 +17,7 @@ class _GraphEdge {
   final double distanceKm;
   final GeoPoint startPoint;
   final GeoPoint endPoint;
+  final List<GeoPoint> intermediateCoords;
   final bool initiallyBlocked;
   final String turnInstruction;
   final String elevationCategory;
@@ -29,6 +30,7 @@ class _GraphEdge {
     required this.distanceKm,
     required this.startPoint,
     required this.endPoint,
+    this.intermediateCoords = const [],
     this.initiallyBlocked = false,
     required this.turnInstruction,
     this.elevationCategory = 'Normal Ground',
@@ -68,15 +70,24 @@ class RouteService {
         : double.infinity;
 
     // If either point is further than 5 km from our localized graph coverage,
-    // do NOT falsely snap across the state to Vijayawada.
-    // Instead, compute an honest geometric corridor labeled ROUTE SAFETY UNVERIFIED.
+    // do NOT draw a fake straight-line across the region.
+    // Instead, fail safely with an honest status indicating no verified road route exists.
     const double maxSnappingRadiusKm = 5.0;
     if (startToGraphKm > maxSnappingRadiusKm || targetToGraphKm > maxSnappingRadiusKm) {
-      return _buildGeometricCorridorResult(
-        userLocation: userLocation,
-        shelterLocation: shelterLocation,
+      final double totalDist = userLocation.distanceTo(shelterLocation);
+      final String reason = startToGraphKm > maxSnappingRadiusKm
+          ? 'Your location is outside verified road graph coverage (${startToGraphKm.toStringAsFixed(1)} km to closest road node).'
+          : 'Destination shelter is in an unmapped or distant region (${targetToGraphKm.toStringAsFixed(1)} km from mapped road network, total straight-line distance ${totalDist.toStringAsFixed(1)} km).';
+
+      return RouteCalculationResult(
+        recommendedRoute: null,
+        alternativeRoute: null,
+        allRoutes: const [],
+        startPoint: userLocation,
+        destinationShelter: shelterLocation,
         disasterType: disasterType,
-        hazards: hazards,
+        statusMessage: 'No verified road route available: $reason Please select a safe shelter within your immediate municipal district.',
+        state: RouteVerificationState.noVerifiedRoute,
       );
     }
 
@@ -115,7 +126,9 @@ class RouteService {
 
     // Path 2: Alternative corridor (penalize primary route's primary edge to find alternative)
     if (safePathEdges != null && safePathEdges.isNotEmpty) {
-      final edgesToPenalize = {safePathEdges.first.id};
+      final edgesToPenalize = safePathEdges.length > 1
+          ? {safePathEdges[1].id}
+          : {safePathEdges.first.id};
       final altPathEdges = _dijkstra(
         graph: graph,
         startId: startNodeId,
@@ -171,15 +184,15 @@ class RouteService {
 
     // Determine honest status message and state
     final bool hasSafe = primarySafeRoute != null && !primarySafeRoute.hasBlockedRoads;
-    final RouteVerificationState state = hasSafe
-        ? RouteVerificationState.routeAvailable
+    final RouteVerificationState state = calculatedRoutes.isNotEmpty
+        ? (hasSafe ? RouteVerificationState.routeAvailable : RouteVerificationState.noVerifiedRoute)
         : RouteVerificationState.noVerifiedRoute;
 
     final String status = hasSafe
-        ? '${calculatedRoutes.length} evacuation corridor(s) calculated. Primary route clear of reported hazards.'
-        : (shortestPathEdges == null
-            ? 'No connected road path found between selected locations on local demo network.'
-            : 'Active hazard alerts block all evaluated road network corridors. Seek elevated shelter immediately.');
+        ? '${calculatedRoutes.length} road-network evacuation corridor(s) calculated. Primary route clear of reported hazards.'
+        : (calculatedRoutes.isNotEmpty
+            ? 'Active hazard alerts block all evaluated road network corridors. Seek elevated shelter immediately.'
+            : 'No verified road route available: No connected road network connects your location (${userLocation.name ?? "Origin"}) to ${shelterLocation.name ?? "Destination"}. Please select an accessible shelter within your district.');
 
     return RouteCalculationResult(
       recommendedRoute: primarySafeRoute,
@@ -190,87 +203,6 @@ class RouteService {
       disasterType: disasterType,
       statusMessage: status,
       state: state,
-    );
-  }
-
-  /// Evaluates an evacuation corridor geometrically when no local street graph exists.
-  RouteCalculationResult _buildGeometricCorridorResult({
-    required GeoPoint userLocation,
-    required GeoPoint shelterLocation,
-    required DisasterType disasterType,
-    required List<HazardModel> hazards,
-  }) {
-    final double distKm = userLocation.distanceTo(shelterLocation);
-    final int travelMinutes = ((distKm / 25.0) * 60).round().clamp(2, 600);
-
-    // Assess hazard risk along direct geometric corridor
-    final assessment = _hazardService.assessSegmentRisk(
-      userLocation,
-      shelterLocation,
-      disasterType,
-      activeHazards: hazards,
-    );
-
-    final bool isBlocked = assessment.isBlocked;
-    final RouteRiskLevel risk = isBlocked
-        ? RouteRiskLevel.blocked
-        : (assessment.isDirectlyHit
-            ? RouteRiskLevel.high
-            : (assessment.isBufferZone ? RouteRiskLevel.moderate : RouteRiskLevel.low));
-
-    // Construct intermediate waypoints along the bearing line for smooth polyline rendering
-    final waypoints = <GeoPoint>[userLocation];
-    const steps = 4;
-    for (int i = 1; i < steps; i++) {
-      final frac = i / steps;
-      final lat = userLocation.latitude + (shelterLocation.latitude - userLocation.latitude) * frac;
-      final lng = userLocation.longitude + (shelterLocation.longitude - userLocation.longitude) * frac;
-      waypoints.add(GeoPoint(lat, lng, name: 'Corridor Marker $i'));
-    }
-    waypoints.add(shelterLocation);
-
-    final segment = RoadSegment(
-      id: 'geom_${userLocation.lat}_${shelterLocation.lat}',
-      start: userLocation,
-      end: shelterLocation,
-      roadName: 'Direct Evacuation Bearing Line',
-      distanceKm: double.parse(distKm.toStringAsFixed(2)),
-      isBlocked: isBlocked,
-      riskLevel: risk,
-      hazardNotes: assessment.explanation,
-      turnInstruction: 'Head towards destination shelter along bearing ${userLocation.bearingTo(shelterLocation).toStringAsFixed(0)}°',
-    );
-
-    final route = EvacuationRoute(
-      id: 'GEOMETRIC-CORRIDOR',
-      name: 'Evacuation Bearing Corridor',
-      destinationShelterId: shelterLocation.name ?? 'shelter',
-      destinationShelterName: shelterLocation.name ?? 'Destination Shelter',
-      waypoints: waypoints,
-      segments: [segment],
-      totalDistanceKm: double.parse(distKm.toStringAsFixed(2)),
-      estimatedMinutes: travelMinutes,
-      riskLevel: risk,
-      verificationState: RouteVerificationState.routeSafetyUnverified,
-      riskScore: isBlocked ? 95.0 : (risk == RouteRiskLevel.high ? 70.0 : 35.0),
-      riskExplanation: 'Geometric evacuation vector. ${assessment.explanation}',
-      disclaimer: 'Detailed street network graph is not loaded for this region. Straight-line evacuation corridor shown. Route safety unverified - proceed with caution.',
-      isRecommended: !isBlocked,
-      hasBlockedRoads: isBlocked,
-      isDemo: true,
-    );
-
-    return RouteCalculationResult(
-      recommendedRoute: isBlocked ? null : route,
-      alternativeRoute: null,
-      allRoutes: [route],
-      startPoint: userLocation,
-      destinationShelter: shelterLocation,
-      disasterType: disasterType,
-      statusMessage: isBlocked
-          ? 'Geometric evacuation vector intersects critical hazard zone. Route impassable.'
-          : 'Direct evacuation corridor calculated. Local street network unverified.',
-      state: isBlocked ? RouteVerificationState.noVerifiedRoute : RouteVerificationState.routeSafetyUnverified,
     );
   }
 
@@ -368,10 +300,6 @@ class RouteService {
 
         double edgeCost = edge.distanceKm;
 
-        if (penalizedEdgeIds.contains(edge.id)) {
-          edgeCost += 50.0; // Penalty to force alternative path discovery
-        }
-
         if (avoidHazards) {
           final assessment = _hazardService.assessSegmentRisk(
             edge.startPoint,
@@ -390,6 +318,10 @@ class RouteService {
               edgeCost += 10.0;
             }
           }
+        }
+
+        if (penalizedEdgeIds.contains(edge.id)) {
+          edgeCost += 50.0; // Penalty to force alternative path discovery
         }
 
         final tentative = distances[currentNode]! + edgeCost;
@@ -473,10 +405,13 @@ class RouteService {
       }
     }
 
-    // 2. Traversed Graph Road Segments
+    // 2. Traversed Graph Road Segments with genuine intermediate road curvature
     for (final edge in pathEdges) {
       if (!waypoints.contains(edge.startPoint)) waypoints.add(edge.startPoint);
-      waypoints.add(edge.endPoint);
+      for (final inter in edge.intermediateCoords) {
+        if (!waypoints.contains(inter)) waypoints.add(inter);
+      }
+      if (!waypoints.contains(edge.endPoint)) waypoints.add(edge.endPoint);
 
       final assessment = _hazardService.assessSegmentRisk(
         edge.startPoint,
@@ -509,6 +444,7 @@ class RouteService {
         id: edge.id,
         start: edge.startPoint,
         end: edge.endPoint,
+        intermediateCoordinates: edge.intermediateCoords,
         roadName: edge.roadName,
         distanceKm: edge.distanceKm,
         isBlocked: isEdgeBlocked,
@@ -655,6 +591,11 @@ class RouteService {
           final blocked = map['status'] == 'blocked' || map['is_blocked'] == true;
           final turn = map['turn_instruction']?.toString() ?? 'Proceed onto $roadName';
 
+          final rawInter = (map['intermediate_coords'] as List<dynamic>?)
+                  ?.map((e) => GeoPoint.fromJson(e as Map<String, dynamic>))
+                  .toList() ??
+              const <GeoPoint>[];
+
           graph.putIfAbsent(u, () => []).add(_GraphEdge(
                 id: map['id']?.toString() ?? 'R_${u}_$v',
                 sourceNodeId: u,
@@ -663,8 +604,10 @@ class RouteService {
                 distanceKm: dist,
                 startPoint: start,
                 endPoint: end,
+                intermediateCoords: rawInter,
                 initiallyBlocked: blocked,
                 turnInstruction: turn,
+                elevationCategory: map['elevation']?.toString() ?? 'Normal Ground',
               ));
           graph.putIfAbsent(v, () => []).add(_GraphEdge(
                 id: '${map['id']}_rev',
@@ -674,8 +617,10 @@ class RouteService {
                 distanceKm: dist,
                 startPoint: end,
                 endPoint: start,
+                intermediateCoords: rawInter.reversed.toList(),
                 initiallyBlocked: blocked,
                 turnInstruction: 'Head towards $u via $roadName',
+                elevationCategory: map['elevation']?.toString() ?? 'Normal Ground',
               ));
         }
         _cachedGraph = graph;
@@ -692,6 +637,16 @@ class RouteService {
   static final Map<String, List<_GraphEdge>> _demoRoadGraph = () {
     final Map<String, List<_GraphEdge>> graph = {};
 
+    // ── KAKINADA COASTAL SECTOR NODES ──────────────────────────────────────
+    const nKSurya = GeoPoint(16.9891, 82.2475, name: 'Suryaraopeta Junction');
+    const nKSubhash = GeoPoint(16.9785, 82.2445, name: 'Subhash Road Junction');
+    const nKCausewayNorth = GeoPoint(16.9710, 82.2415, name: 'Jagannaickpur Bridge North');
+    const nKPortRing = GeoPoint(16.9810, 82.2515, name: 'Port Ring Road Junction');
+    const nKPortSouth = GeoPoint(16.9690, 82.2490, name: 'Port South Interchange');
+    const nKCinema = GeoPoint(16.9740, 82.2380, name: 'Cinema Road Junction');
+    const nKShelter = GeoPoint(16.9604, 82.2382, name: 'Kakinada MPCS Gate');
+
+    // ── VIJAYAWADA URBAN/RIVER SECTOR NODES ────────────────────────────────
     const nBenz = GeoPoint(16.5062, 80.6480, name: 'Benz Circle');
     const nMGJunction = GeoPoint(16.5085, 80.6420, name: 'MG Road Junction');
     const nCanalRoad = GeoPoint(16.5020, 80.6350, name: 'Bandar Canal Road');
@@ -704,6 +659,7 @@ class RouteService {
     const nNorthRidge = GeoPoint(16.5350, 80.6380, name: 'North Ridge Flyover');
     const nBesant = GeoPoint(16.5110, 80.6350, name: 'Besant Commercial Corridor');
     const nGovOverpass = GeoPoint(16.5160, 80.6250, name: 'Governorpet High Overpass');
+    const nBhavaniShelter = GeoPoint(16.5180, 80.5980, name: 'Bhavani Island Community Center');
 
     void addRoad({
       required String id,
@@ -711,6 +667,7 @@ class RouteService {
       required String toName,
       required GeoPoint start,
       required GeoPoint end,
+      List<GeoPoint> intermediate = const [],
       required String name,
       required double km,
       required String turn,
@@ -725,6 +682,7 @@ class RouteService {
             distanceKm: km,
             startPoint: start,
             endPoint: end,
+            intermediateCoords: intermediate,
             initiallyBlocked: blocked,
             turnInstruction: turn,
             elevationCategory: elevation,
@@ -737,21 +695,148 @@ class RouteService {
             distanceKm: km,
             startPoint: end,
             endPoint: start,
+            intermediateCoords: intermediate.reversed.toList(),
             initiallyBlocked: blocked,
             turnInstruction: 'Head towards $fromName via $name',
             elevationCategory: elevation,
           ));
     }
 
-    // Direct Canal Road Corridor (Shortest Direct Route - Submerged Canal Road)
+    // ── KAKINADA COASTAL SECTOR ROADS ──────────────────────────────────────
+    addRoad(
+      id: 'K101',
+      fromName: 'Suryaraopeta Junction',
+      toName: 'Subhash Road Junction',
+      start: nKSurya,
+      end: nKSubhash,
+      intermediate: const [
+        GeoPoint(16.9865, 82.2468),
+        GeoPoint(16.9838, 82.2459),
+        GeoPoint(16.9810, 82.2451),
+      ],
+      name: 'Suryaraopeta Main Road',
+      km: 1.25,
+      turn: 'Head South on Suryaraopeta Main Road',
+    );
+    addRoad(
+      id: 'K102',
+      fromName: 'Subhash Road Junction',
+      toName: 'Jagannaickpur Bridge North',
+      start: nKSubhash,
+      end: nKCausewayNorth,
+      intermediate: const [
+        GeoPoint(16.9760, 82.2435),
+        GeoPoint(16.9735, 82.2425),
+      ],
+      name: 'Old Canal Causeway Road',
+      km: 0.92,
+      turn: 'Proceed along Old Canal Causeway (SIMULATED FLOOD - IMPASSABLE)',
+      blocked: true,
+      elevation: 'Low-Lying Creek',
+    );
+    addRoad(
+      id: 'K103',
+      fromName: 'Subhash Road Junction',
+      toName: 'Port Ring Road Junction',
+      start: nKSubhash,
+      end: nKPortRing,
+      intermediate: const [
+        GeoPoint(16.9792, 82.2470),
+        GeoPoint(16.9802, 82.2495),
+      ],
+      name: 'Port Elevated Bypass Ramp',
+      km: 0.85,
+      turn: 'Turn Left onto Port Elevated Bypass Ramp',
+      elevation: 'Elevated High Ground',
+    );
+    addRoad(
+      id: 'K104',
+      fromName: 'Port Ring Road Junction',
+      toName: 'Port South Interchange',
+      start: nKPortRing,
+      end: nKPortSouth,
+      intermediate: const [
+        GeoPoint(16.9775, 82.2520),
+        GeoPoint(16.9735, 82.2510),
+      ],
+      name: 'Port Coastal Highway South',
+      km: 1.45,
+      turn: 'Continue South along Port Coastal Highway',
+      elevation: 'Elevated Coastal Ridge',
+    );
+    addRoad(
+      id: 'K105',
+      fromName: 'Port South Interchange',
+      toName: 'Kakinada MPCS Gate',
+      start: nKPortSouth,
+      end: nKShelter,
+      intermediate: const [
+        GeoPoint(16.9665, 82.2460),
+        GeoPoint(16.9640, 82.2425),
+        GeoPoint(16.9618, 82.2398),
+      ],
+      name: 'Cyclone Shelter South Access Road',
+      km: 1.55,
+      turn: 'Turn Right into Kakinada MPCS Shelter Compound',
+      elevation: 'Storm-Resistant Elevated Plinth',
+    );
+    addRoad(
+      id: 'K106',
+      fromName: 'Subhash Road Junction',
+      toName: 'Cinema Road Junction',
+      start: nKSubhash,
+      end: nKCinema,
+      intermediate: const [
+        GeoPoint(16.9770, 82.2420),
+        GeoPoint(16.9755, 82.2400),
+      ],
+      name: 'Western Commercial Corridor',
+      km: 0.88,
+      turn: 'Turn Southwest onto Western Commercial Corridor',
+    );
+    addRoad(
+      id: 'K107',
+      fromName: 'Cinema Road Junction',
+      toName: 'Kakinada MPCS Gate',
+      start: nKCinema,
+      end: nKShelter,
+      intermediate: const [
+        GeoPoint(16.9700, 82.2380),
+        GeoPoint(16.9660, 82.2381),
+        GeoPoint(16.9625, 82.2382),
+      ],
+      name: 'Jagannaickpur High Flyover',
+      km: 1.62,
+      turn: 'Ascend Jagannaickpur High Flyover towards MPCS',
+      elevation: 'Elevated Flyover',
+    );
+    addRoad(
+      id: 'K108',
+      fromName: 'Jagannaickpur Bridge North',
+      toName: 'Cinema Road Junction',
+      start: nKCausewayNorth,
+      end: nKCinema,
+      intermediate: const [
+        GeoPoint(16.9725, 82.2395),
+      ],
+      name: 'Causeway South Connector',
+      km: 0.45,
+      turn: 'Connect to Cinema Road Junction',
+    );
+
+    // ── VIJAYAWADA URBAN/RIVER SECTOR ROADS ────────────────────────────────
     addRoad(
       id: 'R101',
       fromName: 'Benz Circle',
       toName: 'MG Road Junction',
       start: nBenz,
       end: nMGJunction,
+      intermediate: const [
+        GeoPoint(16.5070, 80.6460),
+        GeoPoint(16.5078, 80.6440),
+      ],
       name: 'MG Road Expressway',
-      km: 0.8,
+      km: 0.82,
       turn: 'Head West on MG Road towards Center',
     );
     addRoad(
@@ -760,9 +845,14 @@ class RouteService {
       toName: 'Bandar Canal Road',
       start: nMGJunction,
       end: nCanalRoad,
+      intermediate: const [
+        GeoPoint(16.5065, 80.6395),
+        GeoPoint(16.5042, 80.6370),
+      ],
       name: 'Canal South Link Road',
-      km: 1.1,
+      km: 1.12,
       turn: 'Turn Left onto Canal South Link',
+      elevation: 'Low-Lying Canal Basin',
     );
     addRoad(
       id: 'R103',
@@ -770,11 +860,15 @@ class RouteService {
       toName: 'Governorpet Center',
       start: nCanalRoad,
       end: nGovPet,
+      intermediate: const [
+        GeoPoint(16.5060, 80.6325),
+        GeoPoint(16.5100, 80.6300),
+      ],
       name: 'Old Canal Road',
-      km: 1.4,
+      km: 1.45,
       turn: 'Proceed along Old Canal Road (SIMULATED FLOOD)',
       blocked: true,
-      elevation: 'Low-Lying Canal Basin',
+      elevation: 'Submerged Canal Basin',
     );
     addRoad(
       id: 'R105',
@@ -782,22 +876,28 @@ class RouteService {
       toName: 'ZP High School Shelter',
       start: nGovPet,
       end: nShelterA,
+      intermediate: const [
+        GeoPoint(16.5155, 80.6255),
+        GeoPoint(16.5168, 80.6225),
+      ],
       name: 'One-Town Access Road',
-      km: 0.7,
+      km: 0.76,
       turn: 'Turn Right into Shelter Entrance',
     );
-
-    // Elevated Bypass Corridor (Recommended Safe Route)
     addRoad(
       id: 'R201',
       fromName: 'Benz Circle',
       toName: 'Ring Road East',
       start: nBenz,
       end: nWestBypass1,
+      intermediate: const [
+        GeoPoint(16.5090, 80.6510),
+        GeoPoint(16.5120, 80.6535),
+      ],
       name: 'Inner Ring Road Elevated Highway',
-      km: 1.5,
+      km: 1.54,
       turn: 'Take the ramp up onto Inner Ring Road Elevated Highway',
-      elevation: 'Elevated Highway (+8m)',
+      elevation: 'Elevated Flyover (+8m)',
     );
     addRoad(
       id: 'R202',
@@ -805,8 +905,12 @@ class RouteService {
       toName: 'Gunadala Junction',
       start: nWestBypass1,
       end: nWestBypass2,
+      intermediate: const [
+        GeoPoint(16.5195, 80.6520),
+        GeoPoint(16.5240, 80.6485),
+      ],
       name: 'Gunadala Bypass',
-      km: 1.4,
+      km: 1.42,
       turn: 'Continue straight onto Gunadala Bypass',
       elevation: 'High Ground Plateau',
     );
@@ -816,8 +920,12 @@ class RouteService {
       toName: 'North Elevated Corridor',
       start: nWestBypass2,
       end: nWestBypass3,
+      intermediate: const [
+        GeoPoint(16.5270, 80.6400),
+        GeoPoint(16.5260, 80.6350),
+      ],
       name: 'High-Level Flyover Link',
-      km: 1.2,
+      km: 1.25,
       turn: 'Bear Left onto High-Level Flyover Link',
       elevation: 'Elevated Flyover (+12m)',
     );
@@ -827,21 +935,26 @@ class RouteService {
       toName: 'ZP High School Shelter',
       start: nWestBypass3,
       end: nShelterA,
+      intermediate: const [
+        GeoPoint(16.5230, 80.6265),
+        GeoPoint(16.5205, 80.6230),
+      ],
       name: 'Shelter North Protected Approach',
-      km: 1.1,
+      km: 1.15,
       turn: 'Descend ramp and arrive at ZP High School Evacuation Shelter',
       elevation: 'High Ground Entrance',
     );
-
-    // High Ridge Detour Corridor (Alternative Clear Route)
     addRoad(
       id: 'R301',
       fromName: 'Ring Road East',
       toName: 'High Ridge Perimeter',
       start: nWestBypass1,
       end: nHighRidge,
+      intermediate: const [
+        GeoPoint(16.5225, 80.6575),
+      ],
       name: 'Eastern Ridge Highway',
-      km: 2.2,
+      km: 2.25,
       turn: 'Take the Eastern Ridge Highway towards High Ridge',
       elevation: 'Hillside Ridge (+20m)',
     );
@@ -851,8 +964,11 @@ class RouteService {
       toName: 'North Ridge Flyover',
       start: nHighRidge,
       end: nNorthRidge,
+      intermediate: const [
+        GeoPoint(16.5330, 80.6490),
+      ],
       name: 'North Ridge Mountain Pass',
-      km: 1.8,
+      km: 1.85,
       turn: 'Follow North Ridge Mountain Pass around flood perimeter',
       elevation: 'Mountain Ridge (+25m)',
     );
@@ -862,21 +978,25 @@ class RouteService {
       toName: 'ZP High School Shelter',
       start: nNorthRidge,
       end: nShelterA,
+      intermediate: const [
+        GeoPoint(16.5265, 80.6290),
+      ],
       name: 'Northern Ridge Descent Road',
-      km: 1.3,
+      km: 1.35,
       turn: 'Descend into ZP High School Evacuation Shelter entrance',
       elevation: 'Descent Corridor',
     );
-
-    // Commercial Arterial Corridor (Moderate Caution)
     addRoad(
       id: 'R401',
       fromName: 'MG Road Junction',
       toName: 'Besant Commercial Corridor',
       start: nMGJunction,
       end: nBesant,
+      intermediate: const [
+        GeoPoint(16.5098, 80.6385),
+      ],
       name: 'Besant Road Commercial Link',
-      km: 1.2,
+      km: 1.22,
       turn: 'Turn Northwest onto Besant Commercial Link',
       elevation: 'Commercial Basin',
     );
@@ -886,8 +1006,11 @@ class RouteService {
       toName: 'Governorpet High Overpass',
       start: nBesant,
       end: nGovOverpass,
+      intermediate: const [
+        GeoPoint(16.5135, 80.6300),
+      ],
       name: 'Governorpet Elevated Bridge',
-      km: 1.4,
+      km: 1.45,
       turn: 'Ascend Governorpet Elevated Bridge to clear drainage basin',
       elevation: 'Bridge Overpass (+6m)',
     );
@@ -897,10 +1020,28 @@ class RouteService {
       toName: 'ZP High School Shelter',
       start: nGovOverpass,
       end: nShelterA,
+      intermediate: const [
+        GeoPoint(16.5170, 80.6225),
+      ],
       name: 'North Avenue Access Link',
-      km: 1.2,
+      km: 1.21,
       turn: 'Turn Right onto North Avenue towards Shelter Gate',
       elevation: 'Normal Street Level',
+    );
+    addRoad(
+      id: 'R501',
+      fromName: 'ZP High School Shelter',
+      toName: 'Bhavani Island Community Center',
+      start: nShelterA,
+      end: nBhavaniShelter,
+      intermediate: const [
+        GeoPoint(16.5175, 80.6130),
+        GeoPoint(16.5178, 80.6060),
+      ],
+      name: 'Krishna River Bund Elevated Corridor',
+      km: 2.35,
+      turn: 'Follow Krishna River Bund Elevated Corridor to Bhavani Island Center',
+      elevation: 'Elevated River Bund',
     );
 
     return graph;

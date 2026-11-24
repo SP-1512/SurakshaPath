@@ -181,19 +181,25 @@ class _EvacuationMapViewState extends State<EvacuationMapView>
                     height: 7,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B),
+                      color: widget.routeWaypoints.isEmpty
+                          ? AppColors.critical
+                          : (widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B)),
                     ),
                   ),
                   const SizedBox(width: 6),
                   Text(
-                    widget.isNavigating
-                        ? 'LIVE GUIDANCE ACTIVE'
-                        : (widget.isNavigableRoad ? 'ROAD NETWORK MAP' : 'GEOMETRIC MAP'),
+                    widget.routeWaypoints.isEmpty
+                        ? 'NO ROUTE AVAILABLE'
+                        : (widget.isNavigating
+                            ? 'LIVE GUIDANCE ACTIVE'
+                            : (widget.isNavigableRoad ? 'CONNECTED ROAD NETWORK' : 'UNVERIFIED CORRIDOR')),
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0.4,
-                      color: widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B),
+                      color: widget.routeWaypoints.isEmpty
+                          ? AppColors.critical
+                          : (widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B)),
                     ),
                   ),
                 ],
@@ -313,9 +319,7 @@ class _EvacuationMapViewState extends State<EvacuationMapView>
       final centerLat = widget.currentUserLocation?.latitude ?? widget.origin.latitude;
       final centerLon = widget.currentUserLocation?.longitude ?? widget.origin.longitude;
 
-      final points = widget.routeWaypoints.isNotEmpty
-          ? widget.routeWaypoints
-          : [widget.origin, widget.destination];
+      final hasRoute = widget.routeWaypoints.isNotEmpty && widget.isNavigableRoad;
 
       return ml.MapLibreMap(
         options: ml.MapOptions(
@@ -328,22 +332,23 @@ class _EvacuationMapViewState extends State<EvacuationMapView>
           maxZoom: 18.0,
         ),
         layers: [
-          // Evacuation Polyline layer
-          ml.PolylineLayer(
-            polylines: [
-              ml.Feature(
-                geometry: ml.LineString.from(
-                  points.map((p) => p.toGeographic()),
+          // Evacuation Polyline layer (rendered only when verified road route exists)
+          if (hasRoute)
+            ml.PolylineLayer(
+              polylines: [
+                ml.Feature(
+                  geometry: ml.LineString.from(
+                    widget.routeWaypoints.map((p) => p.toGeographic()),
+                  ),
                 ),
+              ],
+              color: ml.Literal(
+                widget.hasBlockedRoads
+                    ? AppColors.critical
+                    : (widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B)),
               ),
-            ],
-            color: ml.Literal(
-              widget.hasBlockedRoads
-                  ? AppColors.critical
-                  : (widget.isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B)),
+              width: const ml.Literal(5.0),
             ),
-            width: const ml.Literal(5.0),
-          ),
 
           // Origin Marker
           ml.CircleLayer(
@@ -551,96 +556,114 @@ class _TacticalRoutePainter extends CustomPainter {
       Offset(hazardCenter.dx - hazardLabel.width / 2, hazardCenter.dy - 5),
     );
 
-    // 5. Evacuation Route Polyline Path
-    final routePoints = <Offset>[];
+    // 5. Evacuation Route Polyline Path (rendered only along genuine road geometry)
     if (waypoints.isNotEmpty) {
+      final routePoints = <Offset>[];
       for (final wp in waypoints) {
         routePoints.add(toOffset(wp));
       }
-    } else {
-      routePoints.add(originOffset);
-      // Smooth intermediate curve bypassing hazard
-      if (isAlternateRoute) {
-        routePoints.add(Offset(
-          (originOffset.dx + destOffset.dx) * 0.5 - 35,
-          (originOffset.dy + destOffset.dy) * 0.5 + 40,
-        ));
-      } else {
-        routePoints.add(Offset(
-          (originOffset.dx + destOffset.dx) * 0.5 + 45,
-          (originOffset.dy + destOffset.dy) * 0.5 - 35,
-        ));
+
+      // Build path following every road intersection and curve
+      final routePath = Path();
+      routePath.moveTo(routePoints.first.dx, routePoints.first.dy);
+      for (int i = 1; i < routePoints.length; i++) {
+        routePath.lineTo(routePoints[i].dx, routePoints[i].dy);
       }
-      routePoints.add(destOffset);
-    }
 
-    // Build path
-    final routePath = Path();
-    routePath.moveTo(routePoints.first.dx, routePoints.first.dy);
-    for (int i = 1; i < routePoints.length; i++) {
-      routePath.lineTo(routePoints[i].dx, routePoints[i].dy);
-    }
+      final Color pathColor = hasBlockedRoads
+          ? AppColors.critical
+          : (isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B));
 
-    final Color pathColor = hasBlockedRoads
-        ? AppColors.critical
-        : (isNavigableRoad ? AppColors.emerald : const Color(0xFFF59E0B));
+      // Outer glow casing
+      final glowPaint = Paint()
+        ..color = pathColor.withOpacity(0.28)
+        ..strokeWidth = 11.0
+        ..style = PaintingStyle.stroke
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      canvas.drawPath(routePath, glowPaint);
 
-    // Outer glow casing
-    final glowPaint = Paint()
-      ..color = pathColor.withOpacity(0.28)
-      ..strokeWidth = 11.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-    canvas.drawPath(routePath, glowPaint);
-
-    // Main route ribbon
-    final mainRoutePaint = Paint()
-      ..color = pathColor
-      ..strokeWidth = 4.5
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-    canvas.drawPath(routePath, mainRoutePaint);
-
-    // Dimmed passed route in navigation mode
-    if (isNavigating && activeSegmentIndex > 0 && activeSegmentIndex < routePoints.length) {
-      final passedPath = Path();
-      passedPath.moveTo(routePoints.first.dx, routePoints.first.dy);
-      for (int i = 1; i <= activeSegmentIndex; i++) {
-        passedPath.lineTo(routePoints[i].dx, routePoints[i].dy);
-      }
-      final passedPaint = Paint()
-        ..color = const Color(0xFF475569)
+      // Main route ribbon
+      final mainRoutePaint = Paint()
+        ..color = pathColor
         ..strokeWidth = 4.5
         ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
-      canvas.drawPath(passedPath, passedPaint);
-    }
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round;
+      canvas.drawPath(routePath, mainRoutePaint);
 
-    // 6. Directional Chevrons along route
-    for (int i = 0; i < routePoints.length - 1; i++) {
-      final p1 = routePoints[i];
-      final p2 = routePoints[i + 1];
-      final mid = Offset((p1.dx + p2.dx) / 2, (p1.dy + p2.dy) / 2);
-      final angle = math.atan2(p2.dy - p1.dy, p2.dx - p1.dx);
+      // Dimmed passed route in navigation mode
+      if (isNavigating && activeSegmentIndex > 0 && activeSegmentIndex < routePoints.length) {
+        final passedPath = Path();
+        passedPath.moveTo(routePoints.first.dx, routePoints.first.dy);
+        for (int i = 1; i <= activeSegmentIndex; i++) {
+          passedPath.lineTo(routePoints[i].dx, routePoints[i].dy);
+        }
+        final passedPaint = Paint()
+          ..color = const Color(0xFF475569)
+          ..strokeWidth = 4.5
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
+        canvas.drawPath(passedPath, passedPaint);
+      }
 
-      canvas.save();
-      canvas.translate(mid.dx, mid.dy);
-      canvas.rotate(angle);
+      // 6. Directional Chevrons along route
+      for (int i = 0; i < routePoints.length - 1; i++) {
+        final p1 = routePoints[i];
+        final p2 = routePoints[i + 1];
+        final mid = Offset((p1.dx + p2.dx) / 2, (p1.dy + p2.dy) / 2);
+        final angle = math.atan2(p2.dy - p1.dy, p2.dx - p1.dx);
 
-      final chevronPaint = Paint()
-        ..color = Colors.white.withOpacity(0.9)
-        ..strokeWidth = 2.0
+        canvas.save();
+        canvas.translate(mid.dx, mid.dy);
+        canvas.rotate(angle);
+
+        final chevronPaint = Paint()
+          ..color = Colors.white.withOpacity(0.9)
+          ..strokeWidth = 2.0
+          ..style = PaintingStyle.stroke
+          ..strokeCap = StrokeCap.round;
+
+        final arrowPath = Path()
+          ..moveTo(-4, -4)
+          ..lineTo(2, 0)
+          ..lineTo(-4, 4);
+        canvas.drawPath(arrowPath, chevronPaint);
+        canvas.restore();
+      }
+    } else {
+      // Safe Failure indicator: No fake straight line is drawn
+      final noRoutePainter = TextPainter(
+        text: const TextSpan(
+          text: 'NO VERIFIED ROAD ROUTE AVAILABLE IN THIS SECTOR',
+          style: TextStyle(
+            color: Color(0xFFEF4444),
+            fontSize: 9,
+            fontWeight: FontWeight.w800,
+            letterSpacing: 0.4,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+      )..layout();
+      final badgeRect = RRect.fromRectAndRadius(
+        Rect.fromCenter(
+          center: Offset(size.width / 2, size.height / 2),
+          width: noRoutePainter.width + 24,
+          height: 28,
+        ),
+        const Radius.circular(6),
+      );
+      final badgePaint = Paint()..color = const Color(0xFF0F172A).withOpacity(0.85);
+      final borderPaint = Paint()
+        ..color = const Color(0xFFEF4444)
         ..style = PaintingStyle.stroke
-        ..strokeCap = StrokeCap.round;
-
-      final arrowPath = Path()
-        ..moveTo(-4, -4)
-        ..lineTo(2, 0)
-        ..lineTo(-4, 4);
-      canvas.drawPath(arrowPath, chevronPaint);
-      canvas.restore();
+        ..strokeWidth = 1.0;
+      canvas.drawRRect(badgeRect, badgePaint);
+      canvas.drawRRect(badgeRect, borderPaint);
+      noRoutePainter.paint(
+        canvas,
+        Offset(size.width / 2 - noRoutePainter.width / 2, size.height / 2 - noRoutePainter.height / 2),
+      );
     }
 
     // 7. Destination Shelter Marker (Flag & Pin)
@@ -680,8 +703,8 @@ class _TacticalRoutePainter extends CustomPainter {
     // 9. Live Navigation Position & Vehicle Heading Indicator
     final activePos = (currentUserLocation != null)
         ? toOffset(currentUserLocation!)
-        : (isNavigating && activeSegmentIndex < routePoints.length
-            ? routePoints[activeSegmentIndex]
+        : (isNavigating && waypoints.isNotEmpty && activeSegmentIndex < waypoints.length
+            ? toOffset(waypoints[activeSegmentIndex])
             : originOffset);
 
     if (isNavigating) {

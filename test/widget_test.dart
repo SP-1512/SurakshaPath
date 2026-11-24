@@ -147,8 +147,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
     await tester.pumpAndSettle();
 
-    // Verify Simulated Corridor Demo Badge is present
-    expect(find.text('SIMULATED CORRIDOR'), findsOneWidget);
+    // Verify Road Network Graph Demo Badge is present
+    expect(find.text('ROAD NETWORK GRAPH'), findsOneWidget);
 
     // Verify explicit hazard avoidance disclaimer is present
     expect(find.textContaining('Simulated Hazard Avoidance (Demo)'), findsOneWidget);

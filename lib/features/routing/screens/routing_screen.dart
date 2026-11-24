@@ -87,22 +87,22 @@ class _RoutingScreenState extends State<RoutingScreen> {
   Future<void> _loadShelterAndComputeRoute() async {
     setState(() => _isLoading = true);
 
-    // 1. Resolve destination shelter
+    // 1. Resolve origin from live/persisted user profile
+    final userLoc = UserProfileService.currentLocation;
+    final originPoint = GeoPoint.fromUserLocation(userLoc);
+
+    // 2. Resolve destination shelter matching user proximity
     ShelterModel? target;
     if (widget.shelterId != null) {
       target = await _shelterService.getShelterById(widget.shelterId!);
     }
-    target ??= await _shelterService.getClosestSafeShelter();
+    target ??= await _shelterService.getClosestSafeShelter(userLoc.latitude, userLoc.longitude);
     if (target == null) {
       final all = await _shelterService.getAvailableShelters();
       if (all.isNotEmpty) target = all.first;
     }
 
     _destinationShelter = target;
-
-    // 2. Resolve origin from live/persisted user profile
-    final userLoc = UserProfileService.currentLocation;
-    final originPoint = GeoPoint.fromUserLocation(userLoc);
 
     // Destination GeoPoint
     final shelterPoint = target != null
@@ -140,6 +140,23 @@ class _RoutingScreenState extends State<RoutingScreen> {
     if (_calculationResult != null && _calculationResult!.allRoutes.isNotEmpty) {
       final safeIndex = _selectedRouteIndex.clamp(0, _calculationResult!.allRoutes.length - 1);
       return _calculationResult!.allRoutes[safeIndex];
+    }
+
+    if (_calculationResult != null && _calculationResult!.state == RouteVerificationState.noVerifiedRoute) {
+      return EvacuationRoute(
+        id: 'no-route',
+        title: 'No Verified Road Route Available',
+        destinationShelterId: _destinationShelter?.id ?? 'none',
+        destinationShelterName: _destinationShelter?.name ?? 'Unreachable Shelter',
+        distanceKm: 0.0,
+        estimatedTimeMinutes: 0,
+        waypoints: const [],
+        segments: const [],
+        safetyStatus: RouteSafetyStatus.blocked,
+        verificationState: RouteVerificationState.noVerifiedRoute,
+        roadConditionSummary: _calculationResult!.statusMessage,
+        warnings: [_calculationResult!.statusMessage],
+      );
     }
 
     // Baseline fallback model
@@ -861,7 +878,9 @@ class _RoutingScreenState extends State<RoutingScreen> {
                             ),
                           ),
                           DemoBadge(
-                            label: route.isNavigableRoad ? 'DEMO ROAD GRAPH' : 'SIMULATED CORRIDOR',
+                            label: _calculationResult?.state == RouteVerificationState.noVerifiedRoute
+                                ? 'NO ROAD ROUTE'
+                                : (route.isNavigableRoad ? 'ROAD NETWORK GRAPH' : 'SIMULATED CORRIDOR'),
                           ),
                           const SizedBox(width: 6),
                           OutlinedButton.icon(
@@ -884,6 +903,51 @@ class _RoutingScreenState extends State<RoutingScreen> {
                   ),
                 ),
                 const SizedBox(height: 14),
+
+                if (_calculationResult?.state == RouteVerificationState.noVerifiedRoute) ...[
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFEF2F2),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: const Color(0xFFFCA5A5)),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(Icons.warning_amber_rounded, size: 18, color: AppColors.critical),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                isTe ? 'ధృవీకరించబడిన రహదారి మార్గం అందుబాటులో లేదు' : 'NO VERIFIED ROAD ROUTE AVAILABLE',
+                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800, color: AppColors.critical),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          _calculationResult?.statusMessage ?? 'Outside verified road network coverage.',
+                          style: const TextStyle(fontSize: 11, color: Color(0xFF991B1B), height: 1.3),
+                        ),
+                        const SizedBox(height: 8),
+                        OutlinedButton.icon(
+                          onPressed: _showShelterSelector,
+                          icon: const Icon(Icons.near_me_rounded, size: 14),
+                          label: Text(isTe ? 'సమీప ఆశ్రయాన్ని ఎంచుకోండి' : 'Select Nearby District Shelter'),
+                          style: OutlinedButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            foregroundColor: AppColors.critical,
+                            side: const BorderSide(color: AppColors.critical),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                ],
 
                 // 2. Real Interactive Evacuation Map
                 Container(
@@ -1214,17 +1278,28 @@ class _RoutingScreenState extends State<RoutingScreen> {
                   height: AppDimensions.buttonHeight,
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: route.hasBlockedRoads ? AppColors.critical : AppColors.emerald,
+                      backgroundColor: _calculationResult?.state == RouteVerificationState.noVerifiedRoute
+                          ? const Color(0xFF94A3B8)
+                          : (route.hasBlockedRoads ? AppColors.critical : AppColors.emerald),
                       foregroundColor: Colors.white,
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
                       ),
                     ),
-                    onPressed: _startNavigation,
-                    icon: const Icon(Icons.navigation_rounded, size: 22),
+                    onPressed: _calculationResult?.state == RouteVerificationState.noVerifiedRoute
+                        ? null
+                        : _startNavigation,
+                    icon: Icon(
+                      _calculationResult?.state == RouteVerificationState.noVerifiedRoute
+                          ? Icons.block_rounded
+                          : Icons.navigation_rounded,
+                      size: 22,
+                    ),
                     label: Text(
-                      AppStrings.startGuidance,
+                      _calculationResult?.state == RouteVerificationState.noVerifiedRoute
+                          ? (isTe ? 'రహదారి అందుబాటులో లేదు' : 'No Passable Road Route')
+                          : AppStrings.startGuidance,
                       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, letterSpacing: 0.3),
                     ),
                   ),

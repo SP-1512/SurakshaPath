@@ -5,13 +5,13 @@
     "address": "Near Port Road, Suryaraopeta, Kakinada, AP",
     "latitude": 16.9604,
     "longitude": 82.2382,
-    "distanceKm": 1.8,
+    "distanceKm": 3.3,
     "capacityTotal": 350,
     "capacityOccupied": 180,
     "status": "open",
     "isVerified": false,
     "contactNumber": "+91 884 236 0101",
-    "facilities": ["Drinking Water", "First Aid", "Backup Power", "Sanitation", "High Ground"],
+    "facilities": ["Drinking Water", "First Aid", "Backup Power", "Sanitation", "High Ground", "Wheelchair Accessible"],
     "notes": "DEMO DATA: Coastal storm shelter on elevated plinth. Unverified sample record."
   },
   {
@@ -20,13 +20,13 @@
     "address": "Beach Road Corridor, Uppada, Kakinada District, AP",
     "latitude": 17.0850,
     "longitude": 82.3270,
-    "distanceKm": 4.2,
+    "distanceKm": 11.2,
     "capacityTotal": 400,
     "capacityOccupied": 120,
     "status": "open",
     "isVerified": false,
     "contactNumber": "+91 884 238 4420",
-    "facilities": ["Drinking Water", "First Aid Station", "Bedding", "Food Counter"],
+    "facilities": ["Drinking Water", "First Aid Station", "Bedding", "Food Counter", "Pets Allowed"],
     "notes": "DEMO DATA: Community storm shelter with open staging ground. Unverified sample record."
   },
   {
@@ -35,13 +35,13 @@
     "address": "Krishna River Corridor, Vijayawada, Krishna District, AP",
     "latitude": 16.5180,
     "longitude": 80.5980,
-    "distanceKm": 6.5,
+    "distanceKm": 5.8,
     "capacityTotal": 600,
     "capacityOccupied": 540,
-    "status": "near_full",
+    "status": "open",
     "isVerified": false,
     "contactNumber": "+91 866 242 9000",
-    "facilities": ["High Elevation", "Emergency Power", "Ambulance Access"],
-    "notes": "DEMO DATA: Riverfront high-ground relief camp. Near capacity. Unverified sample record."
+    "facilities": ["High Elevation", "Emergency Power", "Ambulance Access", "Wheelchair Accessible"],
+    "notes": "DEMO DATA: Riverfront high-ground relief camp. Unverified sample record."
   }
 ]

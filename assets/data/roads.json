@@ -1,12 +1,139 @@
 [
   {
+    "id": "K101",
+    "road_name": "Suryaraopeta Main Road",
+    "start": {"latitude": 16.9891, "longitude": 82.2475, "name": "Suryaraopeta Junction"},
+    "end": {"latitude": 16.9785, "longitude": 82.2445, "name": "Subhash Road Junction"},
+    "intermediate_coords": [
+      {"latitude": 16.9865, "longitude": 82.2468},
+      {"latitude": 16.9838, "longitude": 82.2459},
+      {"latitude": 16.9810, "longitude": 82.2451}
+    ],
+    "distance_km": 1.25,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Normal Ground",
+    "turn_instruction": "Head South on Suryaraopeta Main Road"
+  },
+  {
+    "id": "K102",
+    "road_name": "Old Canal Causeway Road",
+    "start": {"latitude": 16.9785, "longitude": 82.2445, "name": "Subhash Road Junction"},
+    "end": {"latitude": 16.9710, "longitude": 82.2415, "name": "Jagannaickpur Bridge North"},
+    "intermediate_coords": [
+      {"latitude": 16.9760, "longitude": 82.2435},
+      {"latitude": 16.9735, "longitude": 82.2425}
+    ],
+    "distance_km": 0.92,
+    "status": "blocked",
+    "is_blocked": true,
+    "elevation": "Low-Lying Creek",
+    "turn_instruction": "Proceed along Old Canal Causeway (SIMULATED FLOOD - IMPASSABLE)"
+  },
+  {
+    "id": "K103",
+    "road_name": "Port Elevated Bypass Ramp",
+    "start": {"latitude": 16.9785, "longitude": 82.2445, "name": "Subhash Road Junction"},
+    "end": {"latitude": 16.9810, "longitude": 82.2515, "name": "Port Ring Road Junction"},
+    "intermediate_coords": [
+      {"latitude": 16.9792, "longitude": 82.2470},
+      {"latitude": 16.9802, "longitude": 82.2495}
+    ],
+    "distance_km": 0.85,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Elevated High Ground",
+    "turn_instruction": "Turn Left onto Port Elevated Bypass Ramp"
+  },
+  {
+    "id": "K104",
+    "road_name": "Port Coastal Highway South",
+    "start": {"latitude": 16.9810, "longitude": 82.2515, "name": "Port Ring Road Junction"},
+    "end": {"latitude": 16.9690, "longitude": 82.2490, "name": "Port South Interchange"},
+    "intermediate_coords": [
+      {"latitude": 16.9775, "longitude": 82.2520},
+      {"latitude": 16.9735, "longitude": 82.2510}
+    ],
+    "distance_km": 1.45,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Elevated Coastal Ridge",
+    "turn_instruction": "Continue South along Port Coastal Highway"
+  },
+  {
+    "id": "K105",
+    "road_name": "Cyclone Shelter South Access Road",
+    "start": {"latitude": 16.9690, "longitude": 82.2490, "name": "Port South Interchange"},
+    "end": {"latitude": 16.9604, "longitude": 82.2382, "name": "Kakinada MPCS Gate"},
+    "intermediate_coords": [
+      {"latitude": 16.9665, "longitude": 82.2460},
+      {"latitude": 16.9640, "longitude": 82.2425},
+      {"latitude": 16.9618, "longitude": 82.2398}
+    ],
+    "distance_km": 1.55,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Storm-Resistant Elevated Plinth",
+    "turn_instruction": "Turn Right into Kakinada MPCS Shelter Compound"
+  },
+  {
+    "id": "K106",
+    "road_name": "Western Commercial Corridor",
+    "start": {"latitude": 16.9785, "longitude": 82.2445, "name": "Subhash Road Junction"},
+    "end": {"latitude": 16.9740, "longitude": 82.2380, "name": "Cinema Road Junction"},
+    "intermediate_coords": [
+      {"latitude": 16.9770, "longitude": 82.2420},
+      {"latitude": 16.9755, "longitude": 82.2400}
+    ],
+    "distance_km": 0.88,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Normal Ground",
+    "turn_instruction": "Turn Southwest onto Western Commercial Corridor"
+  },
+  {
+    "id": "K107",
+    "road_name": "Jagannaickpur High Flyover",
+    "start": {"latitude": 16.9740, "longitude": 82.2380, "name": "Cinema Road Junction"},
+    "end": {"latitude": 16.9604, "longitude": 82.2382, "name": "Kakinada MPCS Gate"},
+    "intermediate_coords": [
+      {"latitude": 16.9700, "longitude": 82.2380},
+      {"latitude": 16.9660, "longitude": 82.2381},
+      {"latitude": 16.9625, "longitude": 82.2382}
+    ],
+    "distance_km": 1.62,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Elevated Flyover",
+    "turn_instruction": "Ascend Jagannaickpur High Flyover towards MPCS"
+  },
+  {
+    "id": "K108",
+    "road_name": "Causeway South Connector",
+    "start": {"latitude": 16.9710, "longitude": 82.2415, "name": "Jagannaickpur Bridge North"},
+    "end": {"latitude": 16.9740, "longitude": 82.2380, "name": "Cinema Road Junction"},
+    "intermediate_coords": [
+      {"latitude": 16.9725, "longitude": 82.2395}
+    ],
+    "distance_km": 0.45,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Normal Ground",
+    "turn_instruction": "Connect to Cinema Road Junction"
+  },
+  {
     "id": "R101",
     "road_name": "MG Road Expressway",
     "start": {"latitude": 16.5062, "longitude": 80.6480, "name": "Benz Circle"},
     "end": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
-    "distance_km": 0.8,
+    "intermediate_coords": [
+      {"latitude": 16.5070, "longitude": 80.6460},
+      {"latitude": 16.5078, "longitude": 80.6440}
+    ],
+    "distance_km": 0.82,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Normal Ground",
     "turn_instruction": "Head West on MG Road towards Center"
   },
   {
@@ -14,9 +141,14 @@
     "road_name": "Canal South Link Road",
     "start": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
     "end": {"latitude": 16.5020, "longitude": 80.6350, "name": "Bandar Canal Road"},
-    "distance_km": 1.1,
+    "intermediate_coords": [
+      {"latitude": 16.5065, "longitude": 80.6395},
+      {"latitude": 16.5042, "longitude": 80.6370}
+    ],
+    "distance_km": 1.12,
     "status": "warning",
     "is_blocked": false,
+    "elevation": "Low-Lying Canal",
     "turn_instruction": "Turn Left onto Canal South Link Road"
   },
   {
@@ -24,9 +156,14 @@
     "road_name": "Old Canal Road",
     "start": {"latitude": 16.5020, "longitude": 80.6350, "name": "Bandar Canal Road"},
     "end": {"latitude": 16.5140, "longitude": 80.6280, "name": "Governorpet Center"},
-    "distance_km": 1.4,
+    "intermediate_coords": [
+      {"latitude": 16.5060, "longitude": 80.6325},
+      {"latitude": 16.5100, "longitude": 80.6300}
+    ],
+    "distance_km": 1.45,
     "status": "blocked",
     "is_blocked": true,
+    "elevation": "Submerged Basin",
     "turn_instruction": "Proceed along Old Canal Road (SIMULATED FLOOD)"
   },
   {
@@ -34,9 +171,14 @@
     "road_name": "One-Town Access Road",
     "start": {"latitude": 16.5140, "longitude": 80.6280, "name": "Governorpet Center"},
     "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
-    "distance_km": 0.7,
+    "intermediate_coords": [
+      {"latitude": 16.5155, "longitude": 80.6255},
+      {"latitude": 16.5168, "longitude": 80.6225}
+    ],
+    "distance_km": 0.76,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Normal Ground",
     "turn_instruction": "Turn Right into ZP High School Shelter"
   },
   {
@@ -44,9 +186,14 @@
     "road_name": "Inner Ring Road Elevated Highway",
     "start": {"latitude": 16.5062, "longitude": 80.6480, "name": "Benz Circle"},
     "end": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
-    "distance_km": 1.5,
+    "intermediate_coords": [
+      {"latitude": 16.5090, "longitude": 80.6510},
+      {"latitude": 16.5120, "longitude": 80.6535}
+    ],
+    "distance_km": 1.54,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Elevated Flyover",
     "turn_instruction": "Take the ramp up onto Inner Ring Road Elevated Highway"
   },
   {
@@ -54,9 +201,14 @@
     "road_name": "Gunadala Bypass",
     "start": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
     "end": {"latitude": 16.5280, "longitude": 80.6450, "name": "Gunadala Junction"},
-    "distance_km": 1.4,
+    "intermediate_coords": [
+      {"latitude": 16.5195, "longitude": 80.6520},
+      {"latitude": 16.5240, "longitude": 80.6485}
+    ],
+    "distance_km": 1.42,
     "status": "open",
     "is_blocked": false,
+    "elevation": "High Ground Bypass",
     "turn_instruction": "Continue straight onto Gunadala Bypass"
   },
   {
@@ -64,9 +216,14 @@
     "road_name": "High-Level Flyover Link",
     "start": {"latitude": 16.5280, "longitude": 80.6450, "name": "Gunadala Junction"},
     "end": {"latitude": 16.5250, "longitude": 80.6300, "name": "North Elevated Corridor"},
-    "distance_km": 1.2,
+    "intermediate_coords": [
+      {"latitude": 16.5270, "longitude": 80.6400},
+      {"latitude": 16.5260, "longitude": 80.6350}
+    ],
+    "distance_km": 1.25,
     "status": "open",
     "is_blocked": false,
+    "elevation": "High Flyover",
     "turn_instruction": "Bear Left onto High-Level Flyover Link"
   },
   {
@@ -74,9 +231,14 @@
     "road_name": "Shelter North Protected Approach",
     "start": {"latitude": 16.5250, "longitude": 80.6300, "name": "North Elevated Corridor"},
     "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
-    "distance_km": 1.1,
+    "intermediate_coords": [
+      {"latitude": 16.5230, "longitude": 80.6265},
+      {"latitude": 16.5205, "longitude": 80.6230}
+    ],
+    "distance_km": 1.15,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Protected Elevated Ramp",
     "turn_instruction": "Descend ramp and arrive at ZP High School Evacuation Shelter"
   },
   {
@@ -84,9 +246,13 @@
     "road_name": "Eastern Ridge Highway",
     "start": {"latitude": 16.5150, "longitude": 80.6550, "name": "Ring Road East"},
     "end": {"latitude": 16.5300, "longitude": 80.6600, "name": "High Ridge Perimeter"},
-    "distance_km": 2.2,
+    "intermediate_coords": [
+      {"latitude": 16.5225, "longitude": 80.6575}
+    ],
+    "distance_km": 2.25,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Mountain Ridge",
     "turn_instruction": "Take Eastern Ridge Highway towards High Ridge"
   },
   {
@@ -94,9 +260,13 @@
     "road_name": "North Ridge Mountain Pass",
     "start": {"latitude": 16.5300, "longitude": 80.6600, "name": "High Ridge Perimeter"},
     "end": {"latitude": 16.5350, "longitude": 80.6380, "name": "North Ridge Flyover"},
-    "distance_km": 1.8,
+    "intermediate_coords": [
+      {"latitude": 16.5330, "longitude": 80.6490}
+    ],
+    "distance_km": 1.85,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Mountain Pass",
     "turn_instruction": "Follow North Ridge Mountain Pass around flood perimeter"
   },
   {
@@ -104,9 +274,13 @@
     "road_name": "Northern Ridge Descent Road",
     "start": {"latitude": 16.5350, "longitude": 80.6380, "name": "North Ridge Flyover"},
     "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
-    "distance_km": 1.3,
+    "intermediate_coords": [
+      {"latitude": 16.5265, "longitude": 80.6290}
+    ],
+    "distance_km": 1.35,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Ridge Descent",
     "turn_instruction": "Descend into ZP High School Evacuation Shelter entrance"
   },
   {
@@ -114,9 +288,13 @@
     "road_name": "Besant Road Commercial Link",
     "start": {"latitude": 16.5085, "longitude": 80.6420, "name": "MG Road Junction"},
     "end": {"latitude": 16.5110, "longitude": 80.6350, "name": "Besant Commercial Corridor"},
-    "distance_km": 1.2,
+    "intermediate_coords": [
+      {"latitude": 16.5098, "longitude": 80.6385}
+    ],
+    "distance_km": 1.22,
     "status": "warning",
     "is_blocked": false,
+    "elevation": "Normal Ground",
     "turn_instruction": "Turn Northwest onto Besant Commercial Link"
   },
   {
@@ -124,9 +302,13 @@
     "road_name": "Governorpet Elevated Bridge",
     "start": {"latitude": 16.5110, "longitude": 80.6350, "name": "Besant Commercial Corridor"},
     "end": {"latitude": 16.5160, "longitude": 80.6250, "name": "Governorpet High Overpass"},
-    "distance_km": 1.4,
+    "intermediate_coords": [
+      {"latitude": 16.5135, "longitude": 80.6300}
+    ],
+    "distance_km": 1.45,
     "status": "open",
     "is_blocked": false,
+    "elevation": "Elevated Bridge",
     "turn_instruction": "Ascend Governorpet Elevated Bridge"
   },
   {
@@ -134,9 +316,28 @@
     "road_name": "North Avenue Access Link",
     "start": {"latitude": 16.5160, "longitude": 80.6250, "name": "Governorpet High Overpass"},
     "end": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
-    "distance_km": 1.2,
+    "intermediate_coords": [
+      {"latitude": 16.5170, "longitude": 80.6225}
+    ],
+    "distance_km": 1.21,
     "status": "open",
     "is_blocked": false,
+    "elevation": "High Ground Access",
     "turn_instruction": "Turn Right onto North Avenue towards Shelter Gate"
+  },
+  {
+    "id": "R501",
+    "road_name": "Krishna River Bund Elevated Corridor",
+    "start": {"latitude": 16.5180, "longitude": 80.6200, "name": "ZP High School Shelter"},
+    "end": {"latitude": 16.5180, "longitude": 80.5980, "name": "Bhavani Island Community Center"},
+    "intermediate_coords": [
+      {"latitude": 16.5175, "longitude": 80.6130},
+      {"latitude": 16.5178, "longitude": 80.6060}
+    ],
+    "distance_km": 2.35,
+    "status": "open",
+    "is_blocked": false,
+    "elevation": "Elevated River Bund",
+    "turn_instruction": "Follow Krishna River Bund Elevated Corridor to Bhavani Island Center"
   }
 ]
