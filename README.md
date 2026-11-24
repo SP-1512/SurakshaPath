@@ -297,16 +297,38 @@ surakshapath/
 
 ---
 
-## 15. Team Members & Contributors
+## 👥 Team & Contributors
 
-| Team Member | GitHub Profile | Role / Contribution |
-|---|---|---|
-| **SriRam** (Member 1) | [@sp-1512](https://github.com/sp-1512) | **Project Lead & System Architect:** Phase 1 foundation, UI theme & navigation shell, Phase 1B/2A GIS data pipeline audit, cross-module integration reviews, demonstration presentation polish. |
-| **Member 2** | [*(Pending User Confirmation)*](#) | **Offline Maps & GPS Subsystem:** MapLibre Native vector map integration, OpenFreeMap Liberty styling, hardware GNSS acquisition, SQLite tile caching architecture, and Web Mercator quota guards. |
-| **Member 3** | [*(Pending User Confirmation)*](#) | **Disaster Intelligence & Routing:** Dijkstra shortest-path routing with dynamic hazard avoidance, `GeoPoint` spatial calculations, road network graph representation, and geometric corridor fallbacks. |
-| **Shanmukh** (Member 4) | [*(Pending User Confirmation)*](#) | **Shelters Discovery & Emergency SOS:** Shelter data models, capacity and amenities indicators, accessibility/pet filters, Emergency SOS broadcast packet generation, and direct 112/108 helpline integration. |
+SurakshaPath was developed by a collaborative four-member engineering team, with modular ownership across system architecture, offline mapping, algorithmic disaster routing, and civil defense shelter telemetry:
 
-> *Note: Please provide exact GitHub usernames and full names to finalize the contributor links.*
+| Team Member | Project Role | GitHub Profile | Core Responsibilities & Contributions |
+|---|---|---|---|
+| **Sriram Pinninti** | **Project Lead & System Architect** | [@SP-1512](https://github.com/SP-1512) | Project coordination, application foundation & theme architecture, geospatial data pipeline oversight, cross-module integration, test orchestration, and demonstration polish. |
+| **Pragalapati Naga Bala Sai Vignesh** | **Offline Maps & GPS Subsystem** | [@vigneshpragalapati29-gif](https://github.com/vigneshpragalapati29-gif) | MapLibre Native vector integration, OpenFreeMap cartographic styling, GNSS hardware acquisition, SQLite tile caching store, and Web Mercator quota guards. |
+| **Mullapudi NagaRaju** | **Disaster Intelligence & Routing** | [@NagaRaju2605](https://github.com/NagaRaju2605) | Dijkstra shortest-path solver, hazard-aware obstacle avoidance, road network graph modeling, GeoPoint spatial calculations, and geometric corridor fallbacks. |
+| **Ganta Ekanadha Sri Sai Shanmukh** | **Shelter Discovery & Emergency SOS** | [@Shanmukh117-GH](https://github.com/Shanmukh117-GH) | Emergency shelter catalog data models, capacity/amenity tracking, accessibility & pet filters, Emergency SOS broadcast packet builder, and 112/108 helpline integration. |
+
+### Detailed Module Allocation & Technical Responsibilities
+
+- **Sriram Pinninti (Project Lead & System Architect):**
+  - **Leadership & Architecture:** Technical leadership, module interface contracts (`ILocationService`, `IShelterService`, `IAlertService`, `IRouteService`), and overall release roadmap.
+  - **Core Application:** UI shell, responsive 5-tab persistent navigation, high-contrast Material 3 emergency design system, and bilingual English/Telugu localization engine.
+  - **Geospatial & Testing Oversight:** Phase 1B/2A statewide OSM extraction audit, Valhalla POC evaluation, 83-test automated test suite orchestration, and pre-demonstration visual refinement.
+
+- **Pragalapati Naga Bala Sai Vignesh (Offline Maps & GPS Subsystem):**
+  - **Vector Cartography:** MapLibre Native integration with OpenFreeMap Liberty vector styles for high-contrast dark emergency overlays.
+  - **Offline Storage:** SQLite tile cache database (`offline_tiles.db`) and Web Mercator tile quota guard ($\le 3,000$ tiles) for storage safety.
+  - **Positioning:** Native hardware GNSS satellite acquisition with accuracy telemetry and location permission handling.
+
+- **Mullapudi NagaRaju (Disaster Intelligence & Routing):**
+  - **Routing Algorithm:** On-device Dijkstra graph search engine designed to steer evacuees around active flood and storm obstructions.
+  - **Spatial Mathematics:** High-precision Haversine distance, bearing calculations, and dynamic edge penalty weight multipliers for high-risk causeways.
+  - **Safety Fallbacks:** Geometric evacuation corridor generation (`ROUTE SAFETY UNVERIFIED`) for off-grid coordinates outside local road graphs.
+
+- **Ganta Ekanadha Sri Sai Shanmukh (Shelter Discovery & Emergency SOS):**
+  - **Civil Defense Catalog:** Structured shelter data models (`ShelterModel`) with capacity status, essential supplies indicators (water, medical, generator), and filtering (pets, wheelchair accessibility).
+  - **Emergency Protocol:** Single-touch 3-second hold Emergency SOS mechanism with pre-formatted broadcast packet builder incorporating household headcount and mobility assistance needs.
+  - **Helpline Telephony:** Native external telephony integration with National Emergency Helpline (`112`), Ambulance (`108`), and State Disaster Management (`1070`).
 
 ---
 
