@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="../assets/images/logo_white_bg.png" width="120" alt="SurakshaPath Official Logo" />
+</p>
+
 # SurakshaPath: Team Architecture & Contribution Registry
 
 **Project Lead:** Sriram Pinninti  
@@ -8,12 +12,12 @@
 
 ## 1. Official Core Team Roster
 
-| Member | Full Name | Project Role | GitHub Profile | Module Domain |
-|:---:|---|---|:---:|---|
-| **1** | **Sriram Pinninti** | **Project Lead & System Architect** | [@SP-1512](https://github.com/SP-1512) | Project Coordination, Foundation, UI Shell, GIS Pipeline, Integration |
-| **2** | **Pragalapati Naga Bala Sai Vignesh** | **Offline Maps & GPS Subsystem** | [@vigneshpragalapati29-gif](https://github.com/vigneshpragalapati29-gif) | MapLibre Native, OpenFreeMap, GNSS Telemetry, SQLite Tile Caching |
-| **3** | **Mullapudi NagaRaju** | **Disaster Intelligence & Routing** | [@NagaRaju2605](https://github.com/NagaRaju2605) | Dijkstra Engine, Hazard Avoidance, Spatial Math, Graph Modeling |
-| **4** | **Ganta Ekanadha Sri Sai Shanmukh** | **Shelter Discovery & Emergency SOS** | [@Shanmukh117-GH](https://github.com/Shanmukh117-GH) | Shelter Catalog, Civil Defense Models, SOS Packets, 112/108 Telephony |
+| Member | Name | Role | GitHub Profile |
+|:---:|---|---|:---:|
+| **Member 1** | **Sriram Pinninti** | **Project Lead, System Architect, Backend, Data Management & Alerts Developer** | [@SP-1512](https://github.com/SP-1512) |
+| **Member 2** | **Pragalapati Naga Bala Sai Vignesh** | **Offline Maps & GPS Developer** | [@vigneshpragalapati29-gif](https://github.com/vigneshpragalapati29-gif) |
+| **Member 3** | **Mullapudi NagaRaju** | **Disaster Intelligence & Routing Developer** | [@NagaRaju2605](https://github.com/NagaRaju2605) |
+| **Member 4** | **Ganta Ekanadha Sri Sai Shanmukh** | **Shelter Discovery & Emergency SOS Developer** | [@Shanmukh117-GH](https://github.com/Shanmukh117-GH) |
 
 ---
 
@@ -30,15 +34,16 @@ surakshapath/
 │   ├── features/
 │   │   ├── home/                 # Sriram Pinninti (Situation Hero Dashboard, bilingual shell)
 │   │   ├── map/                  # Sai Vignesh (MapLibre vector view, SQLite cache, GPS telemetry)
-│   │   ├── routing/              # NagaRaju (Dijkstra solver, hazard penalty routing, corridor fallback)
+│   │   ├── routing/              # NagaRaju & Sriram (Dijkstra solver, turn-by-turn navigation HUD, corridor fallback)
 │   │   ├── shelters/             # Shanmukh (Shelter discovery, capacity status, pet/accessibility filters)
-│   │   └── emergency/            # Shanmukh (Emergency SOS packet builder, 112/108 hotline dispatch)
+│   │   ├── emergency/            # Shanmukh (Emergency SOS packet builder, 112/108 hotline dispatch)
+│   │   └── disaster/             # Sriram Pinninti (Backend alert pipeline, hazard model & ingestion)
 │   ├── l10n/                     # Sriram Pinninti (English & Telugu ARB bilingual engine)
 │   └── navigation/               # Sriram Pinninti (Persistent 5-tab shell & router)
 ├── backend/
 │   ├── geo_pipeline/             # Sriram Pinninti (Statewide AP boundary audits, OSM extraction)
 │   └── routing/                  # Sriram Pinninti & NagaRaju (Valhalla POC service & benchmark)
-├── test/                         # Sriram Pinninti (83-test verification suite coordination)
+├── test/                         # Sriram Pinninti (87-test verification suite coordination)
 └── docs/                         # Team Architectural & Integration Audits
 ```
 

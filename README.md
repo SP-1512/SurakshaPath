@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/images/logo_color.png" width="160" alt="SurakshaPath Official Logo" />
+  <img src="assets/images/logo_white_bg.png" width="160" alt="SurakshaPath Official Logo" />
 </p>
 
 <h1 align="center">SurakshaPath</h1>
@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.3%2B-02569B?logo=flutter" alt="Flutter Version" /></a>
   <a href="https://dart.dev"><img src="https://img.shields.io/badge/Dart-3.3%2B-0175C2?logo=dart" alt="Dart Version" /></a>
-  <a href="test/"><img src="https://img.shields.io/badge/Tests-83%2F83%20Passed-brightgreen" alt="Tests Passing" /></a>
+  <a href="test/"><img src="https://img.shields.io/badge/Tests-87%2F87%20Passed-brightgreen" alt="Tests Passing" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Analysis-0%20Issues-brightgreen" alt="Analysis" /></a>
   <a href="https://maplibre.org"><img src="https://img.shields.io/badge/Map-MapLibre%20Native%20%7C%20OpenFreeMap-orange" alt="Map Engine" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Bilingual-English%20%7C%20%E0%B0%A4%E0%B1%86%E0%B0%B2%E0%B1%81%E0%B0%97%E0%B1%81-blue" alt="Language" /></a>
@@ -299,36 +299,37 @@ surakshapath/
 
 ## 👥 Team & Contributors
 
-SurakshaPath was developed by a collaborative four-member engineering team, with modular ownership across system architecture, offline mapping, algorithmic disaster routing, and civil defense shelter telemetry:
+SurakshaPath was developed by a collaborative four-member engineering team, with dedicated module ownership across system architecture, offline mapping, algorithmic disaster routing, and civil defense shelter telemetry:
 
-| Team Member | Project Role | GitHub Profile | Core Responsibilities & Contributions |
-|---|---|---|---|
-| **Sriram Pinninti** | **Project Lead & System Architect** | [@SP-1512](https://github.com/SP-1512) | Project coordination, application foundation & theme architecture, geospatial data pipeline oversight, cross-module integration, test orchestration, and demonstration polish. |
-| **Pragalapati Naga Bala Sai Vignesh** | **Offline Maps & GPS Subsystem** | [@vigneshpragalapati29-gif](https://github.com/vigneshpragalapati29-gif) | MapLibre Native vector integration, OpenFreeMap cartographic styling, GNSS hardware acquisition, SQLite tile caching store, and Web Mercator quota guards. |
-| **Mullapudi NagaRaju** | **Disaster Intelligence & Routing** | [@NagaRaju2605](https://github.com/NagaRaju2605) | Dijkstra shortest-path solver, hazard-aware obstacle avoidance, road network graph modeling, GeoPoint spatial calculations, and geometric corridor fallbacks. |
-| **Ganta Ekanadha Sri Sai Shanmukh** | **Shelter Discovery & Emergency SOS** | [@Shanmukh117-GH](https://github.com/Shanmukh117-GH) | Emergency shelter catalog data models, capacity/amenity tracking, accessibility & pet filters, Emergency SOS broadcast packet builder, and 112/108 helpline integration. |
+| Member | Name | Role | GitHub Profile |
+|:---:|---|---|:---:|
+| **Member 1** | **Sriram Pinninti** | **Project Lead, System Architect, Backend, Data Management & Alerts Developer** | [@SP-1512](https://github.com/SP-1512) |
+| **Member 2** | **Pragalapati Naga Bala Sai Vignesh** | **Offline Maps & GPS Developer** | [@vigneshpragalapati29-gif](https://github.com/vigneshpragalapati29-gif) |
+| **Member 3** | **Mullapudi NagaRaju** | **Disaster Intelligence & Routing Developer** | [@NagaRaju2605](https://github.com/NagaRaju2605) |
+| **Member 4** | **Ganta Ekanadha Sri Sai Shanmukh** | **Shelter Discovery & Emergency SOS Developer** | [@Shanmukh117-GH](https://github.com/Shanmukh117-GH) |
 
 ### Detailed Module Allocation & Technical Responsibilities
 
-- **Sriram Pinninti (Project Lead & System Architect):**
-  - **Leadership & Architecture:** Technical leadership, module interface contracts (`ILocationService`, `IShelterService`, `IAlertService`, `IRouteService`), and overall release roadmap.
-  - **Core Application:** UI shell, responsive 5-tab persistent navigation, high-contrast Material 3 emergency design system, and bilingual English/Telugu localization engine.
-  - **Geospatial & Testing Oversight:** Phase 1B/2A statewide OSM extraction audit, Valhalla POC evaluation, 83-test automated test suite orchestration, and pre-demonstration visual refinement.
+- **Member 1: Sriram Pinninti (Project Lead, System Architect, Backend, Data Management & Alerts Developer):**
+  - **Technical Leadership & Architecture:** System architecture, module interface contracts (`ILocationService`, `IShelterService`, `IAlertService`, `IRouteService`), and overall release roadmap.
+  - **Backend & Data Management:** Offline-first data architecture, SQLite local database caching, persistent user profiles (`UserProfileService`), and shared civil defense data models.
+  - **Alerts Engine:** Early warning disaster alert processing, severity level categorization (`critical`, `high`, `moderate`, `low`), expiry filtering, and push notification models.
+  - **Integration & Quality Assurance:** Cross-module coordination across Map, Routing, Shelters, and Alerts; test suite orchestration (87 automated tests); and optimized Android release APK builds.
 
-- **Pragalapati Naga Bala Sai Vignesh (Offline Maps & GPS Subsystem):**
-  - **Vector Cartography:** MapLibre Native integration with OpenFreeMap Liberty vector styles for high-contrast dark emergency overlays.
-  - **Offline Storage:** SQLite tile cache database (`offline_tiles.db`) and Web Mercator tile quota guard ($\le 3,000$ tiles) for storage safety.
-  - **Positioning:** Native hardware GNSS satellite acquisition with accuracy telemetry and location permission handling.
+- **Member 2: Pragalapati Naga Bala Sai Vignesh (Offline Maps & GPS Developer):**
+  - **Vector Cartography:** MapLibre Native vector map integration with OpenFreeMap Liberty styling for high-contrast emergency cartography.
+  - **Offline Storage:** SQLite tile cache database (`offline_tiles.db`) and Web Mercator tile quota guards ($\le 3,000$ tiles) for reliable offline sector storage.
+  - **Positioning:** Native hardware GNSS satellite acquisition with accuracy telemetry, permission handling, and live coordinate streaming.
 
-- **Mullapudi NagaRaju (Disaster Intelligence & Routing):**
-  - **Routing Algorithm:** On-device Dijkstra graph search engine designed to steer evacuees around active flood and storm obstructions.
-  - **Spatial Mathematics:** High-precision Haversine distance, bearing calculations, and dynamic edge penalty weight multipliers for high-risk causeways.
-  - **Safety Fallbacks:** Geometric evacuation corridor generation (`ROUTE SAFETY UNVERIFIED`) for off-grid coordinates outside local road graphs.
+- **Member 3: Mullapudi NagaRaju (Disaster Intelligence & Routing Developer):**
+  - **Routing Algorithm:** On-device Dijkstra graph search engine designed to steer evacuees around active flood and cyclone obstructions.
+  - **Spatial Mathematics:** High-precision Haversine distance calculation, compass bearing math, and dynamic edge penalty weight multipliers for submerged causeways.
+  - **Turn Directives & Fallbacks:** Turn-by-turn maneuver instruction generation and geometric evacuation corridor fallbacks (`ROUTE SAFETY UNVERIFIED`) for off-grid coordinates.
 
-- **Ganta Ekanadha Sri Sai Shanmukh (Shelter Discovery & Emergency SOS):**
-  - **Civil Defense Catalog:** Structured shelter data models (`ShelterModel`) with capacity status, essential supplies indicators (water, medical, generator), and filtering (pets, wheelchair accessibility).
+- **Member 4: Ganta Ekanadha Sri Sai Shanmukh (Shelter Discovery & Emergency SOS Developer):**
+  - **Civil Defense Catalog:** Structured shelter data models (`ShelterModel`) with real-time capacity status, essential supplies indicators (drinking water, first aid, backup power), and filtering (pets allowed, wheelchair accessible, high-elevation).
   - **Emergency Protocol:** Single-touch 3-second hold Emergency SOS mechanism with pre-formatted broadcast packet builder incorporating household headcount and mobility assistance needs.
-  - **Helpline Telephony:** Native external telephony integration with National Emergency Helpline (`112`), Ambulance (`108`), and State Disaster Management (`1070`).
+  - **Helpline Telephony:** Native external telephony integration with National Emergency Helpline (`112`), Ambulance (`108`), and State Disaster Management Authority (`1070`).
 
 ---
 
