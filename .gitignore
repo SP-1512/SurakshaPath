@@ -46,3 +46,9 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+
+# Geospatial Pipeline large extracted datasets
+backend/geo_pipeline/output/
+backend/routing/benchmark_results.json
+*.pbf
+__pycache__/

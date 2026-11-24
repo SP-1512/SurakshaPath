@@ -1,0 +1,66 @@
+# SurakshaPath Geospatial Pipeline Configuration
+# Andhra Pradesh Statewide Road Extraction Settings
+
+state:
+  name: "Andhra Pradesh"
+  country: "India"
+  num_districts: 26
+  num_mandals: 679
+  bounding_box:
+    min_lon: 76.76
+    min_lat: 12.62
+    max_lon: 84.77
+    max_lat: 19.15
+  boundary_buffer_km: 15.0 # Buffer to prevent clipping border transit corridors
+
+sources:
+  osm_geofabrik:
+    url: "https://download.geofabrik.de/asia/india-latest.osm.pbf"
+    expected_size_mb: 2150
+    update_frequency: "daily"
+    license: "ODbL 1.0"
+    attribution: "Map data © OpenStreetMap contributors"
+  overpass_api_endpoints:
+    - "https://overpass-api.de/api/interpreter"
+    - "https://overpass.kumi.systems/api/interpreter"
+
+filtering:
+  vehicle_highways:
+    - motorway
+    - motorway_link
+    - trunk
+    - trunk_link
+    - primary
+    - primary_link
+    - secondary
+    - secondary_link
+    - tertiary
+    - tertiary_link
+    - unclassified
+    - residential
+    - living_street
+    - service
+    - track
+  ferry_routes:
+    - ferry
+  walking_exclusive_highways:
+    - footway
+    - path
+    - pedestrian
+    - steps
+  excluded_access_tags:
+    - private
+    - no
+  water_crossing_tags:
+    - ford
+    - bridge
+    - flood_prone
+
+pilot_sector:
+  name: "Coastal Disaster Corridor Pilot (Vijayawada-Guntur-Tenali-Machilipatnam)"
+  bounding_box:
+    min_lon: 80.35
+    min_lat: 16.15
+    max_lon: 81.25
+    max_lat: 16.65
+  primary_highways: ["NH-16", "NH-65", "SH-48", "SH-2"]

@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  valhalla-ap-routing:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: surakshapath_valhalla_routing
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./data:/custom_files
+      - ../../geo_pipeline/output:/custom_files/pbf_input:ro
+    environment:
+      - server_threads=2
+      - max_cache_size=268435456
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/status"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4096M
+        reservations:
+          cpus: '1.0'
+          memory: 1024M

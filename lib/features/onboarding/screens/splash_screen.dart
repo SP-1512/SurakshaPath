@@ -127,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: const Text(
-                  'DEMO SCENARIO • VIJAYAWADA REGION',
+                  'DISASTER PREPAREDNESS & RESPONSE PLATFORM • ANDHRA PRADESH',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,

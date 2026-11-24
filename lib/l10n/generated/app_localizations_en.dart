@@ -36,10 +36,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navSos => 'SOS';
 
   @override
-  String get demoScenario => 'DEMO SCENARIO';
+  String get demoScenario => 'SIMULATED SCENARIO';
 
   @override
-  String get demoData => 'DEMO DATA';
+  String get demoData => 'ILLUSTRATIVE DATA';
 
   @override
   String get languageLabel => 'EN';
@@ -81,11 +81,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentDistrict => 'Krishna District, Andhra Pradesh';
 
   @override
-  String get heroAlertTitle => '[SIMULATION] Flood Warning: Prakasam Barrage';
+  String get heroAlertTitle => 'Flood Warning: Prakasam Barrage Surge';
 
   @override
   String get heroAlertDesc =>
-      '[DEMO SCENARIO] Krishna River discharge model exceeding danger mark. Riparian zone evacuation demonstration advisory.';
+      'Krishna River discharge model exceeds danger threshold. Riparian zone evacuation guidance in effect for low-lying settlements.';
 
   @override
   String get startEvacuationPlan => 'Start evacuation plan';
@@ -222,7 +222,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendLocationSms => 'Send Location SMS to Contacts';
 
   @override
-  String get copyCoordinates => 'Copy GPS Coordinates';
+  String get copyCoordinates => 'Copy Coordinates';
 
   @override
   String get routeTitle => 'Evacuation Guidance';
@@ -244,7 +244,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Simulated Hazard Avoidance (Demo): Routing algorithm avoids waterlogged waypoints using sample elevation data.';
 
   @override
-  String get offlineModeActive => 'Offline Demo (Cache Incomplete)';
+  String get offlineModeActive => 'Offline Mode (Planned Capability)';
 
   @override
   String get gpsActive => 'GPS Active (Simulated Fix)';

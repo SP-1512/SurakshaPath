@@ -1,0 +1,81 @@
+{
+  "mjolnir": {
+    "tile_dir": "/custom_files/valhalla_tiles",
+    "tile_extract": "/custom_files/valhalla_tiles.tar",
+    "concurrency": 2,
+    "admin": "/custom_files/admin.sqlite",
+    "timezone": "/custom_files/tz.bin",
+    "transit_dir": "/custom_files/transit",
+    "hierarchy": true,
+    "max_cache_size": 268435456,
+    "data_processing": {
+      "infer_internal_intersections": true,
+      "infer_turn_channels": true,
+      "apply_speed_substitutions": true
+    }
+  },
+  "loki": {
+    "actions": ["route", "locate", "status"],
+    "logging": { "type": "std_out", "color": true },
+    "service": {
+      "proxy": "ipc:///tmp/loki"
+    },
+    "service_defaults": {
+      "minimum_reachability": 50,
+      "radius": 500
+    }
+  },
+  "thor": {
+    "logging": { "type": "std_out", "color": true },
+    "service": {
+      "proxy": "ipc:///tmp/thor"
+    },
+    "source_to_target_algorithm": "select_optimal",
+    "costing_options": {
+      "auto": {
+        "maneuver_penalty": 5.0,
+        "country_crossing_penalty": 0.0,
+        "country_crossing_cost": 600.0,
+        "toll_booth_cost": 15.0,
+        "toll_booth_penalty": 0.0,
+        "use_highways": 1.0,
+        "use_tolls": 0.8,
+        "exclude_polygons": true
+      },
+      "pedestrian": {
+        "walking_speed": 4.5,
+        "step_penalty": 30.0,
+        "max_distance": 25000
+      }
+    }
+  },
+  "odin": {
+    "logging": { "type": "std_out", "color": true },
+    "service": {
+      "proxy": "ipc:///tmp/odin"
+    },
+    "markup_formatter": {
+      "markup_enabled": false
+    }
+  },
+  "service_limits": {
+    "auto": {
+      "max_distance": 5000000.0,
+      "max_locations": 20
+    },
+    "pedestrian": {
+      "max_distance": 250000.0,
+      "max_locations": 50
+    },
+    "max_exclude_polygons_length": 10000,
+    "max_reachability": 100,
+    "max_radius": 2000
+  },
+  "http_service": {
+    "service": {
+      "listen": "tcp://0.0.0.0:8002",
+      "loopback": "ipc:///tmp/valhalla",
+      "interrupt": "ipc:///tmp/interrupt"
+    }
+  }
+}

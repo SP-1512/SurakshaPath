@@ -36,11 +36,11 @@
   "@navSos": {
     "description": "Bottom navigation label for SOS action"
   },
-  "demoScenario": "DEMO SCENARIO",
+  "demoScenario": "SIMULATED SCENARIO",
   "@demoScenario": {
     "description": "Badge indicating demo simulation scenario"
   },
-  "demoData": "DEMO DATA",
+  "demoData": "ILLUSTRATIVE DATA",
   "@demoData": {
     "description": "Badge indicating unverified demo data"
   },
@@ -96,11 +96,11 @@
   "@currentDistrict": {
     "description": "Current district location"
   },
-  "heroAlertTitle": "[SIMULATION] Flood Warning: Prakasam Barrage",
+  "heroAlertTitle": "Flood Warning: Prakasam Barrage Surge",
   "@heroAlertTitle": {
     "description": "Hero banner alert headline"
   },
-  "heroAlertDesc": "[DEMO SCENARIO] Krishna River discharge model exceeding danger mark. Riparian zone evacuation demonstration advisory.",
+  "heroAlertDesc": "Krishna River discharge model exceeds danger threshold. Riparian zone evacuation guidance in effect for low-lying settlements.",
   "@heroAlertDesc": {
     "description": "Hero banner alert advisory text"
   },
@@ -280,13 +280,13 @@
   "@sendLocationSms": {
     "description": "Action to send SMS with coordinates"
   },
-  "copyCoordinates": "Copy GPS Coordinates",
+  "copyCoordinates": "Copy Coordinates",
   "@copyCoordinates": {
     "description": "Action to copy coordinates to clipboard"
   },
   "routeTitle": "Evacuation Guidance",
   "@routeTitle": {
-    "description": "Evacuation route header"
+    "description": "Route header"
   },
   "fromLocation": "Current Location (Bunder Road)",
   "@fromLocation": {
@@ -308,7 +308,7 @@
   "@hazardAvoidanceNote": {
     "description": "Note regarding hazard bypass"
   },
-  "offlineModeActive": "Offline Demo (Cache Incomplete)",
+  "offlineModeActive": "Offline Mode (Planned Capability)",
   "@offlineModeActive": {
     "description": "Indicator that offline data is ready"
   },

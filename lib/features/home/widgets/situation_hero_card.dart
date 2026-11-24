@@ -74,7 +74,9 @@ class SituationHeroCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              const DemoBadge(label: 'DEMO SCENARIO', dark: true),
+              const Flexible(
+                child: DemoBadge(label: AppStrings.demoScenario, dark: true),
+              ),
             ],
           ),
           const SizedBox(height: 16),

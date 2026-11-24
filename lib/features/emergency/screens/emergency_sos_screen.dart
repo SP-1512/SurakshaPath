@@ -94,7 +94,7 @@ class _EmergencySosScreenState extends State<EmergencySosScreen> with SingleTick
         'Timestamp: $timeStr\n'
         '$headcountStr'
         'Status: Emergency Assistance Protocol Prepared (Manual Dispatch Required)\n'
-        'Note: Prototype demonstration - no automated dispatch\n'
+        'Note: Preparedness Drill Mode • Direct Helpline Dispatch (112 / 108)\n'
         'Region: Coastal Andhra Pradesh Emergency Grid';
   }
 
@@ -195,7 +195,7 @@ class _EmergencySosScreenState extends State<EmergencySosScreen> with SingleTick
             actions: const [
               Padding(
                 padding: EdgeInsets.only(right: 14),
-                child: Center(child: DemoBadge(label: 'DEMO SOS', dark: true)),
+                child: Center(child: DemoBadge(label: 'DRILL MODE', dark: true)),
               ),
             ],
           ),

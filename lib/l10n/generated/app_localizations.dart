@@ -155,13 +155,13 @@ abstract class AppLocalizations {
   /// Badge indicating demo simulation scenario
   ///
   /// In en, this message translates to:
-  /// **'DEMO SCENARIO'**
+  /// **'SIMULATED SCENARIO'**
   String get demoScenario;
 
   /// Badge indicating unverified demo data
   ///
   /// In en, this message translates to:
-  /// **'DEMO DATA'**
+  /// **'ILLUSTRATIVE DATA'**
   String get demoData;
 
   /// Current language abbreviation
@@ -245,13 +245,13 @@ abstract class AppLocalizations {
   /// Hero banner alert headline
   ///
   /// In en, this message translates to:
-  /// **'[SIMULATION] Flood Warning: Prakasam Barrage'**
+  /// **'Flood Warning: Prakasam Barrage Surge'**
   String get heroAlertTitle;
 
   /// Hero banner alert advisory text
   ///
   /// In en, this message translates to:
-  /// **'[DEMO SCENARIO] Krishna River discharge model exceeding danger mark. Riparian zone evacuation demonstration advisory.'**
+  /// **'Krishna River discharge model exceeds danger threshold. Riparian zone evacuation guidance in effect for low-lying settlements.'**
   String get heroAlertDesc;
 
   /// Action button on hero alert
@@ -521,10 +521,10 @@ abstract class AppLocalizations {
   /// Action to copy coordinates to clipboard
   ///
   /// In en, this message translates to:
-  /// **'Copy GPS Coordinates'**
+  /// **'Copy Coordinates'**
   String get copyCoordinates;
 
-  /// Evacuation route header
+  /// Route header
   ///
   /// In en, this message translates to:
   /// **'Evacuation Guidance'**
@@ -563,7 +563,7 @@ abstract class AppLocalizations {
   /// Indicator that offline data is ready
   ///
   /// In en, this message translates to:
-  /// **'Offline Demo (Cache Incomplete)'**
+  /// **'Offline Mode (Planned Capability)'**
   String get offlineModeActive;
 
   /// GPS status note

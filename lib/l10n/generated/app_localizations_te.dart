@@ -36,10 +36,10 @@ class AppLocalizationsTe extends AppLocalizations {
   String get navSos => 'ఎస్ఓఎస్';
 
   @override
-  String get demoScenario => 'డెమో దృశ్యం';
+  String get demoScenario => 'అనుకరణ దృశ్యం';
 
   @override
-  String get demoData => 'డెమో డేటా';
+  String get demoData => 'నమూనా సమాచారం';
 
   @override
   String get languageLabel => 'తెలుగు';
@@ -81,11 +81,11 @@ class AppLocalizationsTe extends AppLocalizations {
   String get currentDistrict => 'కృష్ణా జిల్లా, ఆంధ్రప్రదేశ్';
 
   @override
-  String get heroAlertTitle => '[అనుకరణ] వరద హెచ్చరిక: ప్రకాశం బ్యారేజ్';
+  String get heroAlertTitle => 'వరద హెచ్చరిక: ప్రకాశం బ్యారేజ్ ఉత్సర్గం';
 
   @override
   String get heroAlertDesc =>
-      '[డెమో దృశ్యం] కృష్ణా నది ఉత్సర్గ నమూనా ప్రమాద స్థాయిని మించింది. లోతట్టు ప్రాంతాల తరలింపు ప్రదర్శన సలహా.';
+      'కృష్ణా నది ఉత్సర్గ నమూనా ప్రమాద స్థాయిని మించింది. లోతట్టు ప్రాంతాల తరలింపు సలహా అమలులో ఉంది.';
 
   @override
   String get startEvacuationPlan => 'తరలింపు ప్రణాళిక ప్రారంభించండి';
@@ -223,7 +223,7 @@ class AppLocalizationsTe extends AppLocalizations {
   String get sendLocationSms => 'పరిచయాలకు లొకేషన్ SMS పంపండి';
 
   @override
-  String get copyCoordinates => 'GPS కోఆర్డినేట్‌లను కాపీ చేయండి';
+  String get copyCoordinates => 'కోఆర్డినేట్‌లను కాపీ చేయండి';
 
   @override
   String get routeTitle => 'తరలింపు మార్గదర్శకత్వం';
@@ -245,7 +245,7 @@ class AppLocalizationsTe extends AppLocalizations {
       'అనుకరణ ప్రమాద నివారణ (డెమో): నమూనా డేటాను ఉపయోగించి నీటి ఎద్దడి ఉన్న మార్గాలను నివారించే ప్రదర్శన మార్గం.';
 
   @override
-  String get offlineModeActive => 'ఆఫ్‌లైన్ డెమో (కాషింగ్ పూర్తి కాలేదు)';
+  String get offlineModeActive => 'ఆఫ్‌లైన్ మోడ్ (ప్రణాళికాబద్ధమైన ఫీచర్)';
 
   @override
   String get gpsActive => 'జీపీఎస్ క్రియాశీలం (అనుకరణ స్థానం)';

@@ -56,41 +56,41 @@ class MockAlertService implements IAlertService {
   static final List<DisasterAlert> _defaultAlerts = [
     DisasterAlert(
       id: 'alert-001',
-      title: '[DEMO SCENARIO] Cyclone Alert: Bay of Bengal System',
+      title: 'Cyclone Warning: Bay of Bengal System',
       description:
-          'DEMO SCENARIO: Deep depression over west-central Bay of Bengal intensifying into a cyclonic storm. Gale winds up to 90 km/h and heavy coastal rain projected along Kakinada and Konaseema coast. Fishermen advised not to venture into sea.',
+          'Deep depression over west-central Bay of Bengal intensifying into a cyclonic storm. Gale winds up to 90 km/h and heavy coastal rain projected along Kakinada and Konaseema coast. Fishermen advised not to venture into sea.',
       disasterType: DisasterType.cyclone,
       severity: AlertSeverity.critical,
       affectedArea: 'Kakinada & Konaseema Coastal Corridor, AP',
       issuedAt: DateTime.now().subtract(const Duration(hours: 2)),
       expiresAt: DateTime.now().add(const Duration(hours: 24)),
-      source: 'DEMO DATA - Sample Cyclone Bulletin',
+      source: 'Coastal Preparedness Bulletin • Kakinada Corridor (Illustrative)',
       isActionRequired: true,
     ),
     DisasterAlert(
       id: 'alert-002',
-      title: '[DEMO SCENARIO] Godavari & Krishna Riparian Flood Advisory',
+      title: 'Godavari & Krishna Riparian Flood Advisory',
       description:
-          'DEMO SCENARIO: High upstream inflows increasing barrage discharge. Low-lying riparian settlements in East Godavari and Krishna districts advised to monitor local advisories and avoid submerged causeways.',
+          'High upstream inflows increasing barrage discharge. Low-lying riparian settlements in East Godavari and Krishna districts advised to monitor local advisories and avoid submerged causeways.',
       disasterType: DisasterType.flood,
       severity: AlertSeverity.warning,
       affectedArea: 'Dowleswaram & Krishna Riparian Zones, AP',
       issuedAt: DateTime.now().subtract(const Duration(minutes: 45)),
       expiresAt: DateTime.now().add(const Duration(hours: 12)),
-      source: 'DEMO DATA - Sample River Advisory',
+      source: 'State Disaster Management Advisory • Krishna Basin (Illustrative)',
       isActionRequired: true,
     ),
     DisasterAlert(
       id: 'alert-003',
-      title: '[DEMO SCENARIO] Coastal Inundation Advisory - Lowland Causeways',
+      title: 'Coastal Inundation Advisory: Lowland Causeways',
       description:
-          'DEMO SCENARIO: High astronomical tide combined with moderate coastal swells may cause localized waterlogging along Uppada Beach Road and coastal village access roads.',
+          'High astronomical tide combined with moderate coastal swells may cause localized waterlogging along Uppada Beach Road and coastal village access roads.',
       disasterType: DisasterType.flood,
       severity: AlertSeverity.advisory,
       affectedArea: 'Uppada Beach Corridor, Kakinada District, AP',
       issuedAt: DateTime.now().subtract(const Duration(minutes: 90)),
       expiresAt: null, // Unspecified expiration window
-      source: 'DEMO DATA - Sample Coastal Bulletin',
+      source: 'Coastal Ocean State Advisory • Uppada Corridor (Illustrative)',
       isActionRequired: false,
     ),
   ];

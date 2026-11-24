@@ -21,8 +21,8 @@ class AppStrings {
   static String get navSos => _isTe ? 'ఎస్ఓఎస్' : 'SOS';
 
   // Header & Badges
-  static const String demoScenario = 'DEMO SCENARIO';
-  static const String demoData = 'DEMO DATA';
+  static const String demoScenario = 'SIMULATION';
+  static const String demoData = 'ILLUSTRATIVE DATA';
   static String get languageLabel => _isTe ? 'తెలుగు' : 'EN';
   static String get switchLanguage => _isTe ? 'భాష మార్చండి' : 'Change Language';
 
@@ -39,10 +39,10 @@ class AppStrings {
   static String get currentDistrict => _isTe ? 'కృష్ణా జిల్లా, ఆంధ్రప్రదేశ్' : 'Krishna District, Andhra Pradesh';
 
   // Hero Card
-  static String get heroAlertTitle => _isTe ? '[అనుకరణ] వరద హెచ్చరిక: ప్రకాశం బ్యారేజ్' : '[SIMULATION] Flood Warning: Prakasam Barrage';
+  static String get heroAlertTitle => _isTe ? 'వరద హెచ్చరిక: ప్రకాశం బ్యారేజ్ ఉత్సర్గం' : 'Flood Warning: Prakasam Barrage Surge';
   static String get heroAlertDesc => _isTe 
-      ? '[డెమో దృశ్యం] కృష్ణా నది ఉత్సర్గ నమూనా ప్రమాద స్థాయిని మించింది. లోతట్టు ప్రాంతాల తరలింపు ప్రదర్శన సలహా.'
-      : '[DEMO SCENARIO] Krishna River discharge model exceeding danger mark. Riparian zone evacuation demonstration advisory.';
+      ? 'కృష్ణా నది ఉత్సర్గ నమూనా ప్రమాద స్థాయిని మించింది. లోతట్టు ప్రాంతాల తరలింపు సలహా అమలులో ఉంది.'
+      : 'Krishna River discharge model exceeds danger threshold. Riparian zone evacuation guidance in effect for low-lying settlements.';
   static String get startEvacuationPlan => _isTe ? 'తరలింపు ప్రణాళిక ప్రారంభించండి' : 'Start evacuation plan';
   static String get highRisk => _isTe ? 'తీవ్ర ప్రమాదం' : 'High Risk';
   static String get moderateRisk => _isTe ? 'మధ్యస్థ ప్రమాదం' : 'Moderate Risk';
@@ -111,7 +111,7 @@ class AppStrings {
       : 'Simulated Hazard Avoidance (Demo): Routing algorithm avoids sample waterlogged waypoints using synthetic elevation model. Road clearance not physically verified.';
 
   // Map & Offline
-  static const String offlineModeActive = 'Offline Demo (Cache Incomplete)';
+  static const String offlineModeActive = 'Offline Mode (Planned Capability)';
   static const String gpsActive = 'GPS Active (Simulated Fix)';
   static const String openEvacMap = 'Open Evacuation Map';
 

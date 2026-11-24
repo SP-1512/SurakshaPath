@@ -214,15 +214,15 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Demonstration Mode Notice', style: TextStyle(fontWeight: FontWeight.w800)),
+        title: const Text('Disaster Preparedness Notice', style: TextStyle(fontWeight: FontWeight.w800)),
         content: const Text(
-          'Offline map tiles and live routing caches are simulated in this prototype. For real emergencies, rely on official broadcast channels and direct helpline numbers (112 / 108).',
+          'This platform operates in coastal disaster preparedness and simulation mode. Regional routing models, hazard overlays, and shelter capacities are illustrative. In an active emergency, always prioritize official directives from APSDMA / NDRF and call emergency helplines (112 / 108).',
           style: TextStyle(fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('OK'),
+            child: const Text('Understood'),
           ),
         ],
       ),
@@ -307,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onOpenMap: () => Navigator.pushNamed(context, AppRouter.map),
                   onOpenShelters: () => Navigator.pushNamed(context, AppRouter.shelters),
                   onOpenAlerts: () => Navigator.pushNamed(context, AppRouter.alerts),
-                  onOpenHelplines: _showOfflinePackDialog,
+                  onOpenHelplines: () => Navigator.pushNamed(context, AppRouter.sos),
                 ),
                 const SizedBox(height: 20),
 
@@ -388,6 +388,39 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: AlertCard(alert: alert),
                         ),
                       ),
+
+                const SizedBox(height: 12),
+                InkWell(
+                  onTap: _showOfflinePackDialog,
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(AppDimensions.radiusMedium),
+                      border: Border.all(color: const Color(0xFFE2E8F0)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.info_outline_rounded, size: 16, color: AppColors.slate),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            LocaleService.isTelugu
+                                ? 'ఆంధ్రప్రదేశ్ తీరప్రాంత విపత్తు సన్నద్ధత డ్రిల్ • క్రియాశీల అత్యవసరాలకు 112 / 108 కి కాల్ చేయండి'
+                                : 'Andhra Pradesh Coastal Preparedness Drill • For active emergencies dial 112 / 108',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.slate,
+                              fontWeight: FontWeight.w500,
+                              height: 1.3,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
 
                 const SizedBox(height: 32),
               ],
