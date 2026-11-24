@@ -7,3 +7,8 @@
 -keep class io.flutter.plugins.**  { *; }
 -dontwarn io.flutter.embedding.**
 -ignorewarnings
+
+# MapLibre Native JNI / FFI
+-keep class org.maplibre.** { *; }
+-dontwarn org.maplibre.**
+

@@ -52,3 +52,7 @@ backend/geo_pipeline/output/
 backend/routing/benchmark_results.json
 *.pbf
 __pycache__/
+
+# Release APK build artifacts
+release_apks/
+*.apk
